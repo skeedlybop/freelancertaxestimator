@@ -5,7 +5,16 @@
      crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Freelancer Profit & Tax Calculator</title>
+    <title>Freelancer Tax Estimator – Free Calculator for US, UK, CA, AU, DE &amp; NZ</title>
+    <meta name="description" content="Free freelancer and contractor tax estimator for the US, UK, Canada, Australia, Germany, and New Zealand. Instantly calculate your net profit, estimated tax bill, and quarterly payments.">
+    <link rel="canonical" href="https://freelancertaxestimator.com/">
+    <meta property="og:title" content="Freelancer Tax Estimator – Calculate Your Net Profit">
+    <meta property="og:description" content="Free tax calculator for freelancers in the US, UK, Canada, Australia, Germany and New Zealand. Instant results with breakdown chart.">
+    <meta property="og:url" content="https://freelancertaxestimator.com/">
+    <meta property="og:type" content="website">
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"WebApplication","name":"Freelancer Tax Estimator","url":"https://freelancertaxestimator.com","description":"Estimate freelancer taxes and net profit for US, UK, Canada, Australia, Germany, and New Zealand.","applicationCategory":"FinanceApplication","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -24,243 +33,596 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    
-    <!-- Chosen Palette: Glassmorphism Neutrals (Translucent Whites/Darks with Indigo Accents) -->
-    <!-- Application Structure Plan: A single-page dashboard layout. The left column (or top on mobile) houses user inputs (Country, Income, Expenses). The right column (bottom on mobile) immediately reflects these changes via a summary data readout and a dynamic Chart.js visualization. A dark mode toggle sits at the top. The layout uses CSS Backdrop Filter to achieve the requested 'glassmorphism' effect. A print/PDF function is anchored at the bottom to capture the results. -->
-    <!-- Visualization & Content Choices: Goal: Inform & Breakdown -> Viz: Doughnut Chart -> Interaction: Hover tooltips, dynamic updates on input -> Justification: A doughnut chart perfectly visualizes parts of a whole (Gross Income divided into Expenses, Tax, and Net Profit). -> Library/Method: Chart.js Canvas. -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
-
     <style>
-        body {
-            transition: background-color 0.3s ease;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1.5rem;
-        }
-
-        .bg-light-theme {
-            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
-        }
-
-        .bg-dark-theme {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-        }
+        body { transition: background-color 0.3s ease; min-height: 100vh; }
+        .bg-light-theme { background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%); }
+        .bg-dark-theme  { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }
 
         .glass-panel {
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border-radius: 1.5rem;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 30px rgba(0,0,0,0.1);
             transition: all 0.3s ease;
         }
+        .light .glass-panel { background: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.3); color: #1f2937; }
+        .dark  .glass-panel { background: rgba(30,41,59,0.7);    border: 1px solid rgba(255,255,255,0.1); color: #f3f4f6; }
 
-        .light .glass-panel {
-            background: var(--tw-colors-glassLight);
-            border: 1px solid var(--tw-colors-glassBorderLight);
-            color: #1f2937;
-        }
-
-        .dark .glass-panel {
-            background: var(--tw-colors-glassDark);
-            border: 1px solid var(--tw-colors-glassBorderDark);
-            color: #f3f4f6;
-        }
-        
-        .light .glass-input {
-            background: rgba(255, 255, 255, 0.5);
-            border: 1px solid rgba(0,0,0,0.1);
-            color: #1f2937;
-        }
-
-        .dark .glass-input {
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: #f3f4f6;
-        }
+        .light .glass-input { background: rgba(255,255,255,0.5); border: 1px solid rgba(0,0,0,0.1);         color: #1f2937; }
+        .dark  .glass-input { background: rgba(0,0,0,0.2);        border: 1px solid rgba(255,255,255,0.1); color: #f3f4f6; }
 
         .chart-container {
-            position: relative;
-            width: 100%;
-            max-width: 400px;
-            margin-left: auto;
-            margin-right: auto;
-            height: 300px;
-            max-height: 350px;
+            position: relative; width: 100%; max-width: 400px;
+            margin: 0 auto; height: 300px; max-height: 350px;
         }
 
-        input[type=range] {
-            -webkit-appearance: none;
-            width: 100%;
-            background: transparent;
-        }
-
+        input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
         input[type=range]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            height: 20px;
-            width: 20px;
-            border-radius: 50%;
-            background: #6366f1;
-            cursor: pointer;
-            margin-top: -8px;
-            box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+            -webkit-appearance: none; height: 20px; width: 20px; border-radius: 50%;
+            background: #6366f1; cursor: pointer; margin-top: -8px;
+            box-shadow: 0 0 10px rgba(99,102,241,0.5);
         }
-
         input[type=range]::-webkit-slider-runnable-track {
-            width: 100%;
-            height: 6px;
-            cursor: pointer;
-            background: rgba(156, 163, 175, 0.3);
-            border-radius: 3px;
+            width: 100%; height: 6px; cursor: pointer;
+            background: rgba(156,163,175,0.3); border-radius: 3px;
         }
-        
-        .dark input[type=range]::-webkit-slider-runnable-track {
-             background: rgba(255, 255, 255, 0.1);
+        .dark input[type=range]::-webkit-slider-runnable-track { background: rgba(255,255,255,0.1); }
+
+        /* Sticky header */
+        .site-header {
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            position: sticky; top: 0; z-index: 50;
         }
+        .light .site-header { background: rgba(255,255,255,0.85); border-bottom: 1px solid rgba(0,0,0,0.08); color: #1f2937; }
+        .dark  .site-header { background: rgba(15,23,42,0.85);    border-bottom: 1px solid rgba(255,255,255,0.08); color: #f3f4f6; }
+
+        /* Content sections */
+        .content-section { max-width: 64rem; margin: 0 auto; padding: 3rem 1.5rem; }
+        .light .content-section { color: #1f2937; }
+        .dark  .content-section { color: #f3f4f6; }
+
+        .tip-card { border-radius: 0.75rem; padding: 1rem 1.25rem; transition: all 0.2s ease; }
+        .light .tip-card { background: rgba(255,255,255,0.65); border: 1px solid rgba(0,0,0,0.07); }
+        .dark  .tip-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); }
+
+        /* Country guide tabs */
+        .tab-btn { padding: 0.5rem 1rem; border-radius: 0.5rem; font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: all 0.2s ease; }
+        .tab-btn.active { background: #6366f1; color: #ffffff; }
+        .light .tab-btn:not(.active) { background: rgba(255,255,255,0.55); color: #1f2937; border: 1px solid rgba(0,0,0,0.08); }
+        .dark  .tab-btn:not(.active) { background: rgba(255,255,255,0.08); color: #f3f4f6; }
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+
+        /* FAQ accordion */
+        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+        .faq-answer.open { max-height: 400px; }
+
+        /* Affiliate cards */
+        .affiliate-card { border-radius: 1rem; padding: 1.25rem; transition: transform 0.2s ease, box-shadow 0.2s ease; display: block; }
+        .affiliate-card:hover { transform: translateY(-2px); }
+        .light .affiliate-card { background: rgba(255,255,255,0.7); border: 1px solid rgba(0,0,0,0.08); box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
+        .dark  .affiliate-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); }
+
+        /* Ad units */
+        .ad-unit { max-width: 64rem; margin: 0 auto; padding: 0.5rem 1.5rem; text-align: center; }
+        .ad-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.06em; opacity: 0.35; margin-bottom: 0.25rem; }
+
+        /* Section dividers */
+        .section-divider { border-color: rgba(156,163,175,0.25); }
     </style>
 </head>
 <body class="bg-light-theme" id="body-bg">
 
-    <div class="glass-panel w-full max-w-5xl p-6 md:p-10" id="main-app">
-        <div class="flex justify-between items-center mb-8">
+    <!-- Sticky Header -->
+    <header class="site-header">
+        <div class="max-w-5xl mx-auto px-6 py-3 flex justify-between items-center">
             <div>
-                <h1 class="text-2xl md:text-3xl font-bold tracking-tight">Freelancer Finance Tool</h1>
-                <p class="text-sm opacity-70 mt-1">Estimate your taxes and calculate true net profit.</p>
+                <span class="font-bold text-base tracking-tight">FreelancerTaxEstimator</span>
+                <span class="text-xs ml-2 opacity-40 hidden sm:inline">Free · No signup required</span>
             </div>
-            <button id="theme-toggle" class="p-3 rounded-full glass-input hover:bg-opacity-80 transition-all text-xl" title="Toggle Dark Mode">
-                <span id="theme-icon">🌙</span>
-            </button>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
-            
-            <div class="space-y-6">
-                <div>
-                    <label class="block text-sm font-medium mb-2 opacity-80">Tax Residency (Country)</label>
-                    <select id="country-select" class="glass-input w-full p-3 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 transition-all appearance-none">
-                        <option value="US">United States (Est. 25% Flat Rate)</option>
-                        <option value="UK">United Kingdom (Est. 20% Flat Rate)</option>
-                        <option value="CA">Canada (Est. 28% Flat Rate)</option>
-                        <option value="AU">Australia (Est. 30% Flat Rate)</option>
-                        <option value="DE">Germany (Est. 35% Flat Rate)</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium mb-2 opacity-80">Annual Gross Income</label>
-                    <div class="relative">
-                        <span class="absolute left-4 top-3 opacity-70">$</span>
-                        <input type="number" id="income-input" value="80000" min="0" class="glass-input w-full p-3 pl-8 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
-                    </div>
-                </div>
-
-                <div>
-                    <div class="flex justify-between items-end mb-2">
-                        <label class="block text-sm font-medium opacity-80">Estimated Business Expenses</label>
-                        <span class="text-lg font-bold text-indigo-500" id="expenses-display">$15,000</span>
-                    </div>
-                    <input type="range" id="expenses-slider" min="0" max="100000" value="15000" step="500" class="w-full mt-2">
-                    <div class="flex justify-between text-xs opacity-50 mt-1">
-                        <span>$0</span>
-                        <span>$100k+</span>
-                    </div>
-                </div>
-                
-                <div class="pt-4 border-t border-gray-400 border-opacity-20">
-                     <p class="text-xs opacity-60">Note: Tax rates used are simplified flat-rate estimates for demonstration purposes. Always consult a tax professional for accurate filings.</p>
-                </div>
+            <div class="flex items-center gap-5">
+                <a href="/privacy.html" class="text-xs opacity-50 hover:opacity-90 transition-opacity">Privacy Policy</a>
+                <button id="theme-toggle" class="p-2 rounded-full glass-input hover:opacity-80 transition-all text-base" title="Toggle Dark Mode">
+                    <span id="theme-icon">🌙</span>
+                </button>
             </div>
-
-            <div class="flex flex-col h-full" id="report-content">
-                
-                <div class="grid grid-cols-2 gap-4 mb-6">
-                    <div class="glass-input p-4 rounded-2xl text-center">
-                        <p class="text-sm opacity-70 mb-1">Taxable Income</p>
-                        <p class="text-xl md:text-2xl font-bold" id="res-taxable">$0</p>
-                    </div>
-                    <div class="glass-input p-4 rounded-2xl text-center">
-                        <p class="text-sm opacity-70 mb-1">Estimated Tax</p>
-                        <p class="text-xl md:text-2xl font-bold text-red-400" id="res-tax">$0</p>
-                    </div>
-                    <div class="glass-input p-4 rounded-2xl text-center col-span-2 shadow-[0_0_15px_rgba(99,102,241,0.2)]">
-                        <p class="text-sm opacity-70 mb-1">Estimated Net Profit</p>
-                        <p class="text-3xl md:text-4xl font-black text-green-500" id="res-net">$0</p>
-                    </div>
-                </div>
-
-                <div class="flex-grow flex items-center justify-center p-4">
-                    <div class="chart-container">
-                        <canvas id="financialChart"></canvas>
-                    </div>
-                </div>
-            </div>
-
         </div>
+    </header>
 
-        <div class="mt-10 flex justify-center lg:justify-end">
-            <button id="download-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-xl font-medium transition-colors shadow-lg flex items-center gap-2">
-                <span>&#128196;</span> Download PDF Report
-            </button>
-        </div>
+    <!-- Top Ad Unit — replace YOUR_SLOT_ID_1 with your AdSense slot ID -->
+    <div class="ad-unit mt-4 mb-2">
+        <p class="ad-label">Advertisement</p>
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-1848064915651660"
+             data-ad-slot="6030989241"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
     </div>
 
+    <main>
+        <!-- Page intro + Calculator -->
+        <div class="max-w-5xl mx-auto px-4 py-6">
+            <div class="text-center mb-6">
+                <h1 class="text-3xl md:text-4xl font-extrabold mb-2 light:text-gray-900">Freelancer Tax Estimator</h1>
+                <p class="text-base opacity-65 max-w-2xl mx-auto">Quickly estimate your tax bill and true net profit as a freelancer or sole trader. Supports the US, UK, Canada, Australia, Germany, and New Zealand.</p>
+            </div>
+
+            <div class="glass-panel w-full p-6 md:p-10" id="main-app">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+
+                    <!-- Inputs + Dynamic Tips -->
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium mb-2 opacity-80">Tax Residency</label>
+                            <select id="country-select" class="glass-input w-full p-3 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 transition-all appearance-none">
+                                <option value="US">United States (Est. 25% flat rate)</option>
+                                <option value="UK">United Kingdom (Est. 20% flat rate)</option>
+                                <option value="CA">Canada (Est. 28% flat rate)</option>
+                                <option value="AU">Australia (Est. 30% flat rate)</option>
+                                <option value="DE">Germany (Est. 35% flat rate)</option>
+                                <option value="NZ">New Zealand (Est. 28% flat rate)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-2 opacity-80">Annual Gross Income</label>
+                            <div class="relative">
+                                <span class="absolute left-4 top-3 opacity-70" id="currency-prefix">$</span>
+                                <input type="number" id="income-input" value="80000" min="0" class="glass-input w-full p-3 pl-8 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between items-end mb-2">
+                                <label class="block text-sm font-medium opacity-80">Estimated Business Expenses</label>
+                                <span class="text-lg font-bold text-indigo-500" id="expenses-display">$15,000</span>
+                            </div>
+                            <input type="range" id="expenses-slider" min="0" max="100000" value="15000" step="500" class="w-full mt-2">
+                            <div class="flex justify-between text-xs opacity-50 mt-1">
+                                <span>0</span>
+                                <span>100k+</span>
+                            </div>
+                        </div>
+
+                        <!-- Dynamic regional tax tips -->
+                        <div class="pt-4 border-t border-gray-400 border-opacity-20">
+                            <p class="text-xs font-semibold uppercase tracking-wider opacity-50 mb-3" id="tips-heading">Tax Tips · United States</p>
+                            <ul class="space-y-2" id="tips-list"><!-- populated by JS --></ul>
+                            <p class="text-xs opacity-45 mt-4">Rates are simplified flat-rate estimates. Always consult a qualified tax professional for accurate filings.</p>
+                        </div>
+                    </div>
+
+                    <!-- Results + Chart -->
+                    <div class="flex flex-col h-full" id="report-content">
+                        <div class="grid grid-cols-2 gap-4 mb-6">
+                            <div class="glass-input p-4 rounded-2xl text-center">
+                                <p class="text-sm opacity-70 mb-1">Taxable Income</p>
+                                <p class="text-xl md:text-2xl font-bold" id="res-taxable">$0</p>
+                            </div>
+                            <div class="glass-input p-4 rounded-2xl text-center">
+                                <p class="text-sm opacity-70 mb-1">Estimated Tax</p>
+                                <p class="text-xl md:text-2xl font-bold text-red-400" id="res-tax">$0</p>
+                            </div>
+                            <div class="glass-input p-4 rounded-2xl text-center">
+                                <p class="text-sm opacity-70 mb-1">Quarterly Payment</p>
+                                <p class="text-xl md:text-2xl font-bold text-orange-400" id="res-quarterly">$0</p>
+                            </div>
+                            <div class="glass-input p-4 rounded-2xl text-center shadow-[0_0_15px_rgba(99,102,241,0.2)]">
+                                <p class="text-sm opacity-70 mb-1">Net Profit</p>
+                                <p class="text-2xl md:text-3xl font-black text-green-500" id="res-net">$0</p>
+                            </div>
+                        </div>
+
+                        <div class="flex-grow flex items-center justify-center p-4">
+                            <div class="chart-container">
+                                <canvas id="financialChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-10 flex justify-center lg:justify-end">
+                    <button id="download-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-xl font-medium transition-colors shadow-lg flex items-center gap-2">
+                        <span>&#128196;</span> Download PDF Report
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mid-page Ad Unit — ad-2 -->
+        <div class="ad-unit my-6">
+            <p class="ad-label">Advertisement</p>
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-1848064915651660"
+                 data-ad-slot="8511024373"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+
+        <!-- How It Works -->
+        <section class="content-section">
+            <h2 class="text-2xl md:text-3xl font-bold mb-6">How This Calculator Works</h2>
+            <div class="grid md:grid-cols-3 gap-5">
+                <div class="tip-card">
+                    <div class="text-xl font-bold mb-2 text-indigo-500">1. Enter Income &amp; Expenses</div>
+                    <p class="text-sm opacity-75">Input your annual gross income and drag the slider to estimate your business expenses. Common deductions include home office, equipment, software subscriptions, and work-related travel.</p>
+                </div>
+                <div class="tip-card">
+                    <div class="text-xl font-bold mb-2 text-indigo-500">2. Select Your Country</div>
+                    <p class="text-sm opacity-75">Choose your country of tax residency. The calculator applies a simplified flat rate for each region, and shows tailored tax tips for your country below the inputs.</p>
+                </div>
+                <div class="tip-card">
+                    <div class="text-xl font-bold mb-2 text-indigo-500">3. Review Your Estimate</div>
+                    <p class="text-sm opacity-75">See your taxable income, estimated annual tax, quarterly instalment amount, and true net profit. Download a PDF summary to share with your accountant.</p>
+                </div>
+            </div>
+            <p class="text-sm opacity-55 mt-6 leading-relaxed">
+                <strong>Disclaimer:</strong> This tool uses simplified flat-rate estimates for illustration and planning purposes only. Real tax obligations depend on your filing status, specific deductions, progressive tax brackets, additional levies (such as self-employment tax in the US or National Insurance in the UK), and your country's current legislation. Always consult a qualified tax professional before making financial decisions.
+            </p>
+        </section>
+
+        <!-- Country Tax Guides -->
+        <section class="content-section border-t section-divider">
+            <h2 class="text-2xl md:text-3xl font-bold mb-3">Freelancer Tax Guide by Country</h2>
+            <p class="text-sm opacity-65 mb-6">Tax rules vary significantly for self-employed workers around the world. Here's what you need to know in each region.</p>
+
+            <div class="flex flex-wrap gap-2 mb-6" id="guide-tabs">
+                <button class="tab-btn active" data-tab="guide-us">United States</button>
+                <button class="tab-btn" data-tab="guide-uk">United Kingdom</button>
+                <button class="tab-btn" data-tab="guide-ca">Canada</button>
+                <button class="tab-btn" data-tab="guide-au">Australia</button>
+                <button class="tab-btn" data-tab="guide-de">Germany</button>
+                <button class="tab-btn" data-tab="guide-nz">New Zealand</button>
+            </div>
+
+            <!-- US -->
+            <div class="tab-panel active" id="guide-us">
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="tip-card">
+                        <h3 class="font-semibold mb-2 text-indigo-500">Self-Employment Tax</h3>
+                        <p class="text-sm opacity-75">US freelancers pay a 15.3% self-employment (SE) tax on top of income tax, covering Social Security (12.4%) and Medicare (2.9%). You can deduct half of SE tax from your gross income, slightly reducing your taxable income.</p>
+                    </div>
+                    <div class="tip-card">
+                        <h3 class="font-semibold mb-2 text-indigo-500">Quarterly Estimated Taxes</h3>
+                        <p class="text-sm opacity-75">The IRS requires quarterly estimated payments if you expect to owe $1,000 or more. Due dates fall in April, June, September, and January. Missing these can trigger underpayment penalties even if you pay in full at tax time.</p>
+                    </div>
+                    <div class="tip-card">
+                        <h3 class="font-semibold mb-2 text-indigo-500">Key Deductions</h3>
+                        <p class="text-sm opacity-75">Claim home office ($5/sqft up to 300 sqft simplified method), health insurance premiums, SEP-IRA contributions (up to 25% of net self-employment income), equipment, software subscriptions, and professional development costs.</p>
+                    </div>
+                    <div class="tip-card">
+                        <h3 class="font-semibold mb-2 text-indigo-500">S-Corp Strategy</h3>
+                        <p class="text-sm opacity-75">Freelancers earning above ~$60,000 may benefit from an S-Corp election — paying yourself a "reasonable salary" and taking remaining profits as dividends, reducing exposure to SE tax. Consult a CPA before electing.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- UK -->
+            <div class="tab-panel" id="guide-uk">
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="tip-card">
+                        <h3 class="font-semibold mb-2 text-indigo-500">Self Assessment</h3>
+                        <p class="text-sm opacity-75">Register for Self Assessment with HMRC and file your tax return online by January 31st each year. Tax owed for the prior tax year (April 6 – April 5) must be paid by the same deadline.</p>
+                    </div>
+                    <div class="tip-card">
+                        <h3 class="font-semibold mb-2 text-indigo-500">National Insurance Contributions</h3>
+                        <p class="text-sm opacity-75">Self-employed individuals pay Class 2 NI (£3.45/week if profits exceed the Small Profits Threshold) and Class 4 NI (9% on profits £12,570–£50,270, then 2% above £50,270).</p>
+                    </div>
+                    <div class="tip-card">
+                        <h3 class="font-semibold mb-2 text-indigo-500">Payments on Account</h3>
+                        <p class="text-sm opacity-75">HMRC may require advance payments of 50% of your prior year tax bill, due January 31st and July 31st. New freelancers are often caught off guard by this double payment in their second year of trading.</p>
+                    </div>
+                    <div class="tip-card">
+                        <h3 class="font-semibold mb-2 text-indigo-500">Key Deductions</h3>
+                        <p class="text-sm opacity-75">Claim allowable business expenses including equipment, software, a proportion of home broadband, work travel, and professional training. The £1,000 trading allowance simplifies reporting for lower-income freelancers.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CA -->
+            <div class="tab-panel" id="guide-ca">
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="tip-card">
+                        <h3 class="font-semibold mb-2 text-indigo-500">CPP Contributions</h3>
+                        <p class="text-sm opacity-75">Self-employed Canadians pay both the employee and employer portions of Canada Pension Plan contributions — approximately 11.9% combined on net self-employment earnings between $3,500 and $68,500 (2024 limits).</p>
+                    </div>
+                    <div class="tip-card">
+                        <h3 class="font-semibold mb-2 text-indigo-500">Filing Deadlines</h3>
+                        <p class="text-sm opacity-75">File your T1 personal return by June 15th if self-employed. However, any tax owing must be paid by April 30th to avoid interest charges — a common trap for first-year freelancers who assume the filing extension covers payment too.</p>
+                    </div>
+                    <div class="tip-card">
+                        <h3 class="font-semibold mb-2 text-indigo-500">Tax Instalments</h3>
+                        <p class="text-sm opacity-75">If you owe more than $3,000 in net tax ($1,800 in Quebec) in two consecutive years, the CRA will require quarterly instalment payments in March, June, September, and December.</p>
+                    </div>
+                    <div class="tip-card">
+                        <h3 class="font-semibold mb-2 text-indigo-500">Key Deductions</h3>
+                        <p class="text-sm opacity-75">Deduct a proportion of home office expenses, business vehicle use, professional dues, advertising, and business insurance. RRSP contributions reduce taxable income and are a powerful retirement savings vehicle for freelancers.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AU -->
+            <div class="tab-panel" id="guide-au">
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="tip-card">
+                        <h3 class="font-semibold mb-2 text-indigo-500">GST Registration</h3>
+                        <p class="text-sm opacity-75">Register for GST if your annual turnover exceeds $75,000 AUD. Once registered, charge 10% GST on your services and lodge a Business Activity Statement (BAS) quarterly or monthly with the ATO.</p>
+                    </div>
+                    <div class="tip-card">
+                        <h3 class="font-semibold mb-2 text-indigo-500">PAYG Instalments</h3>
+                        <p class="text-sm opacity-75">Once you earn above a threshold, the ATO enrolls you in Pay As You Go (PAYG) instalments — quarterly pre-payments towards your annual income tax. This prevents a large lump-sum tax bill at EOFY.</p>
+                    </div>
+                    <div class="tip-card">
+                        <h3 class="font-semibold mb-2 text-indigo-500">Key Deductions</h3>
+                        <p class="text-sm opacity-75">Deduct business expenses including equipment (instant asset write-off for eligible assets), home office running costs using the 67 cents/hour fixed-rate method, vehicle logbook expenses, and professional subscriptions.</p>
+                    </div>
+                    <div class="tip-card">
+                        <h3 class="font-semibold mb-2 text-indigo-500">Superannuation</h3>
+                        <p class="text-sm opacity-75">Self-employed Australians are not required to contribute to super. However, voluntary concessional contributions up to the $27,500 annual cap are tax-deductible and provide a powerful long-term tax advantage.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DE -->
+            <div class="tab-panel" id="guide-de">
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="tip-card">
+                        <h3 class="font-semibold mb-2 text-indigo-500">Freiberufler vs. Gewerbetreibender</h3>
+                        <p class="text-sm opacity-75">Germany distinguishes between Freiberufler (freelance professionals: designers, writers, engineers, doctors) and Gewerbetreibende (commercial traders). Freiberufler have simpler registration and are exempt from Gewerbesteuer (trade tax).</p>
+                    </div>
+                    <div class="tip-card">
+                        <h3 class="font-semibold mb-2 text-indigo-500">Umsatzsteuer (VAT)</h3>
+                        <p class="text-sm opacity-75">Register for VAT if annual revenue exceeds €22,000. The Kleinunternehmerregelung exempts you below this threshold — but you cannot reclaim input VAT. The standard rate is 19%; a reduced rate of 7% applies to certain goods and services.</p>
+                    </div>
+                    <div class="tip-card">
+                        <h3 class="font-semibold mb-2 text-indigo-500">Filing &amp; Advance Payments</h3>
+                        <p class="text-sm opacity-75">File your Einkommensteuererklärung by July 31st (or October 31st with a Steuerberater). Vorauszahlungen (advance tax payments) are made quarterly in March, June, September, and December.</p>
+                    </div>
+                    <div class="tip-card">
+                        <h3 class="font-semibold mb-2 text-indigo-500">Health Insurance</h3>
+                        <p class="text-sm opacity-75">Self-employed individuals in Germany must arrange their own health insurance — either public (gesetzliche Krankenversicherung) or private (private Krankenversicherung). Premiums are partially deductible as Sonderausgaben (special expenses).</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NZ -->
+            <div class="tab-panel" id="guide-nz">
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="tip-card">
+                        <h3 class="font-semibold mb-2 text-indigo-500">Registering as a Sole Trader</h3>
+                        <p class="text-sm opacity-75">Registering as self-employed with Inland Revenue (IRD) is free and straightforward — you just need an IRD number and can manage everything via myIR online. Most freelancers operate as sole traders unless turnover or liability concerns justify forming a company.</p>
+                    </div>
+                    <div class="tip-card">
+                        <h3 class="font-semibold mb-2 text-indigo-500">Provisional Tax</h3>
+                        <p class="text-sm opacity-75">If you owe more than NZD $5,000 in residual income tax, IRD requires provisional tax throughout the year. Under the standard method, payments are made in August, January, and May, calculated at 105% of the prior year's tax (110% if you're a larger taxpayer).</p>
+                    </div>
+                    <div class="tip-card">
+                        <h3 class="font-semibold mb-2 text-indigo-500">GST Registration</h3>
+                        <p class="text-sm opacity-75">Register for GST when your turnover exceeds NZD $60,000 per year. Once registered, charge 15% GST on your services and file GST returns every two months or every six months. You can also claim back GST on business expenses.</p>
+                    </div>
+                    <div class="tip-card">
+                        <h3 class="font-semibold mb-2 text-indigo-500">ACC Levies &amp; Filing</h3>
+                        <p class="text-sm opacity-75">All self-employed New Zealanders pay ACC (Accident Compensation Corporation) levies at approximately $1.60 per $100 of liable earnings, capped at NZD $139,384. File your IR3 individual return by July 7th, or later if registered with a tax agent.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="content-section border-t section-divider">
+            <h2 class="text-2xl md:text-3xl font-bold mb-6">Frequently Asked Questions</h2>
+            <div class="space-y-3" id="faq-list"><!-- populated by JS --></div>
+        </section>
+
+        <!-- Recommended Tools (Affiliate) -->
+        <section class="content-section border-t section-divider">
+            <h2 class="text-2xl md:text-3xl font-bold mb-2">Tools to Keep You Tax-Ready Year-Round</h2>
+            <p class="text-sm opacity-65 mb-6">Knowing your estimate is step one. These tools help freelancers track expenses, send invoices, and file accurately. <em>Some links below are affiliate links — we may earn a small commission at no cost to you.</em></p>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <a href="https://www.freshbooks.com/" target="_blank" rel="noopener noreferrer" class="affiliate-card">
+                    <div class="font-bold text-indigo-500 mb-1">FreshBooks</div>
+                    <div class="text-xs font-semibold text-green-500 mb-2">Free Trial Available</div>
+                    <p class="text-sm opacity-75">Invoicing, expense tracking, and time-tracking built for freelancers. Automatically categorises expenses to simplify tax time.</p>
+                </a>
+                <a href="https://quickbooks.intuit.com/self-employed/" target="_blank" rel="noopener noreferrer" class="affiliate-card">
+                    <div class="font-bold text-indigo-500 mb-1">QuickBooks Self-Employed</div>
+                    <div class="text-xs font-semibold text-green-500 mb-2">30-Day Free Trial</div>
+                    <p class="text-sm opacity-75">Separates business and personal expenses automatically, tracks mileage, and estimates quarterly tax payments throughout the year.</p>
+                </a>
+                <a href="https://www.wave.com/" target="_blank" rel="noopener noreferrer" class="affiliate-card">
+                    <div class="font-bold text-indigo-500 mb-1">Wave Accounting</div>
+                    <div class="text-xs font-semibold text-green-500 mb-2">Free Forever</div>
+                    <p class="text-sm opacity-75">Free invoicing and accounting software for freelancers and small businesses. No hidden fees and no credit card required.</p>
+                </a>
+                <a href="https://turbotax.intuit.com/personal-taxes/self-employed/" target="_blank" rel="noopener noreferrer" class="affiliate-card">
+                    <div class="font-bold text-indigo-500 mb-1">TurboTax Self-Employed</div>
+                    <div class="text-xs font-semibold text-blue-400 mb-2">US Only</div>
+                    <p class="text-sm opacity-75">Guides US freelancers through every deduction category. Imports 1099 forms automatically and handles Schedule C filing.</p>
+                </a>
+                <a href="https://www.keepertax.com/" target="_blank" rel="noopener noreferrer" class="affiliate-card">
+                    <div class="font-bold text-indigo-500 mb-1">Keeper Tax</div>
+                    <div class="text-xs font-semibold text-blue-400 mb-2">US Only</div>
+                    <p class="text-sm opacity-75">AI-powered app that scans your bank transactions to find tax write-offs automatically. Freelancers save an average of $1,249 per year.</p>
+                </a>
+                <a href="https://www.xero.com/" target="_blank" rel="noopener noreferrer" class="affiliate-card">
+                    <div class="font-bold text-indigo-500 mb-1">Xero</div>
+                    <div class="text-xs font-semibold text-green-500 mb-2">Popular in AU, NZ &amp; UK</div>
+                    <p class="text-sm opacity-75">Cloud accounting software widely used by freelancers in Australia, New Zealand, and the UK. Integrates directly with most banks.</p>
+                </a>
+            </div>
+        </section>
+
+        <!-- Bottom Ad Unit — ad-3 -->
+        <div class="ad-unit my-8">
+            <p class="ad-label">Advertisement</p>
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-1848064915651660"
+                 data-ad-slot="4717907572"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+    </main>
+
+    <footer class="border-t section-divider">
+        <div class="max-w-5xl mx-auto px-6 py-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div>
+                <p class="font-semibold">FreelancerTaxEstimator.com</p>
+                <p class="text-xs opacity-45 mt-1">For informational purposes only. Not professional financial or tax advice.</p>
+            </div>
+            <div class="flex gap-6 text-sm opacity-55">
+                <a href="/privacy.html" class="hover:opacity-100 transition-opacity">Privacy Policy</a>
+                <span>&#169; 2025 FreelancerTaxEstimator.com</span>
+            </div>
+        </div>
+    </footer>
+
     <script>
-        const taxRates = {
-            'US': 0.25,
-            'UK': 0.20,
-            'CA': 0.28,
-            'AU': 0.30,
-            'DE': 0.35
+        const countryConfig = {
+            US: { rate: 0.25, symbol: '$',    currency: 'USD', name: 'United States'  },
+            UK: { rate: 0.20, symbol: '£',    currency: 'GBP', name: 'United Kingdom' },
+            CA: { rate: 0.28, symbol: 'CA$',  currency: 'CAD', name: 'Canada'         },
+            AU: { rate: 0.30, symbol: 'A$',   currency: 'AUD', name: 'Australia'      },
+            DE: { rate: 0.35, symbol: '€',    currency: 'EUR', name: 'Germany'        },
+            NZ: { rate: 0.28, symbol: 'NZ$',  currency: 'NZD', name: 'New Zealand'    },
         };
 
+        const countryTips = {
+            US: [
+                'Self-employment tax adds ~15.3% on top of income tax — budget for both.',
+                'Pay quarterly estimated taxes in April, June, September, and January.',
+                'Deduct home office ($5/sqft), health insurance premiums, and SEP-IRA contributions.',
+                'Earning over $60k? An S-Corp election can reduce your self-employment tax.',
+            ],
+            UK: [
+                'File your Self Assessment return with HMRC online by January 31st each year.',
+                'Pay Class 2 NI (£3.45/wk) and Class 4 NI (9% on profits £12,570–£50,270).',
+                'Watch for "Payments on Account" — HMRC may pre-charge 50% of next year\'s tax.',
+                'The £1,000 trading allowance can simplify reporting for lower-income freelancers.',
+            ],
+            CA: [
+                'You pay both the employee and employer CPP portions (~11.9% combined).',
+                'Tax is due April 30th even though the T1 filing deadline is June 15th.',
+                'Quarterly CRA instalments required in March, June, September, December if owing >$3k.',
+                'RRSP contributions reduce taxable income dollar-for-dollar.',
+            ],
+            AU: [
+                'Register for GST if turnover exceeds $75,000 AUD and lodge quarterly BAS.',
+                'The ATO will enroll you in PAYG instalments once you earn above their threshold.',
+                'Claim home office running costs at the ATO\'s 67 cents/hour fixed rate.',
+                'Voluntary super contributions up to $27,500 are tax-deductible.',
+            ],
+            DE: [
+                'Register with your Finanzamt as a Freiberufler (professional) or Gewerbetreibender.',
+                'VAT exemption (Kleinunternehmerregelung) applies if annual revenue is below €22,000.',
+                'Freiberufler are exempt from Gewerbesteuer — Gewerbetreibende are not.',
+                'File your Einkommensteuererklärung by July 31st (October 31st with a tax advisor).',
+            ],
+            NZ: [
+                'Register as a sole trader with IRD for free — you only need your IRD number.',
+                'Provisional tax applies if you owe more than NZD $5,000, paid in 3 instalments.',
+                'Register for GST when turnover exceeds NZD $60,000 and charge 15% on services.',
+                'ACC levies (~$1.60 per $100 earned) apply to all self-employed New Zealanders.',
+            ],
+        };
+
+        const faqs = [
+            {
+                q: 'How accurate is this tax calculator?',
+                a: 'This tool uses simplified flat-rate estimates for illustration and planning purposes only. Real tax obligations depend on your filing status, specific deductions, progressive tax brackets, additional levies (like self-employment tax in the US or National Insurance in the UK), and your country\'s current rules. Always consult a qualified tax professional before making financial decisions.'
+            },
+            {
+                q: 'What counts as a business expense for freelancers?',
+                a: 'Deductible business expenses are costs incurred wholly and exclusively for your freelance work. Common examples include: a dedicated home office (or a portion of rent/mortgage), equipment such as computers and cameras, software subscriptions, professional training, work-related travel, and professional memberships. Rules vary by country — keep receipts for everything.'
+            },
+            {
+                q: 'Do freelancers pay more tax than employees?',
+                a: 'Often yes — in many countries, self-employed individuals pay additional levies that employees don\'t face directly. In the US this is the 15.3% self-employment tax; in the UK, Class 4 National Insurance; in Canada, the full CPP contribution. However, freelancers also have access to a wider range of deductions which can partially offset this additional burden.'
+            },
+            {
+                q: 'What are quarterly estimated taxes and do I need to pay them?',
+                a: 'In the US, Canada, Germany, New Zealand, and Australia, tax authorities expect self-employed individuals to pre-pay their expected tax in instalments throughout the year rather than one lump sum at filing time. Missing these payments can result in interest charges or underpayment penalties. The "Quarterly Payment" figure in this calculator is a rough guide — actual amounts depend on your country\'s specific rules and your income from the prior year.'
+            },
+            {
+                q: 'Should I form a company or operate as a sole trader?',
+                a: 'For most freelancers starting out, operating as a sole trader (or self-employed individual) is simpler and cheaper to administer. As income grows — typically above $60,000–$80,000 depending on your country — forming a company (LLC, Ltd, Pty Ltd, or NZ Ltd) can offer tax advantages and personal liability protection. This decision is best made with an accountant who understands your specific situation.'
+            },
+            {
+                q: 'How do I find a good accountant for freelancers?',
+                a: 'Look for accountants who specialise in self-employment or small businesses — they will know your country\'s specific rules far better than a generalist. Ask other freelancers in your industry for personal recommendations. Professional bodies like the AICPA (US), ICAEW (UK), CPA Canada, CPA Australia, and the Chartered Accountants Australia and New Zealand (CA ANZ) maintain searchable directories of registered, qualified professionals.'
+            },
+        ];
+
+        // DOM refs
         let myChart = null;
-
-        const elCountry = document.getElementById('country-select');
-        const elIncome = document.getElementById('income-input');
-        const elExpSlider = document.getElementById('expenses-slider');
+        const elCountry    = document.getElementById('country-select');
+        const elIncome     = document.getElementById('income-input');
+        const elExpSlider  = document.getElementById('expenses-slider');
         const elExpDisplay = document.getElementById('expenses-display');
-        
-        const elResTaxable = document.getElementById('res-taxable');
-        const elResTax = document.getElementById('res-tax');
-        const elResNet = document.getElementById('res-net');
+        const elCurrPrefix = document.getElementById('currency-prefix');
+        const elTaxable    = document.getElementById('res-taxable');
+        const elTax        = document.getElementById('res-tax');
+        const elQuarterly  = document.getElementById('res-quarterly');
+        const elNet        = document.getElementById('res-net');
+        const elTipsHead   = document.getElementById('tips-heading');
+        const elTipsList   = document.getElementById('tips-list');
 
-        const formatCurrency = (num) => {
-            return '$' + parseFloat(num).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+        const fmt = (num, currency) =>
+            new Intl.NumberFormat('en-US', { style: 'currency', currency, maximumFractionDigits: 0 }).format(num);
+
+        const updateTips = (code) => {
+            const cfg  = countryConfig[code];
+            const tips = countryTips[code] || [];
+            elTipsHead.textContent = `Tax Tips · ${cfg.name}`;
+            elTipsList.innerHTML = tips.map(t =>
+                `<li class="flex gap-2 text-xs opacity-75"><span class="text-indigo-500 flex-shrink-0 mt-0.5">&#10003;</span><span>${t}</span></li>`
+            ).join('');
         };
 
         const calculate = () => {
-            let gross = parseFloat(elIncome.value) || 0;
-            let expenses = parseFloat(elExpSlider.value) || 0;
-            let rate = taxRates[elCountry.value] || 0;
+            const code    = elCountry.value;
+            const cfg     = countryConfig[code];
+            const gross    = parseFloat(elIncome.value) || 0;
+            let expenses   = parseFloat(elExpSlider.value) || 0;
+            if (expenses > gross) { expenses = gross; elExpSlider.value = gross; }
 
-            if (expenses > gross) {
-                expenses = gross;
-                elExpSlider.value = gross;
-            }
+            elCurrPrefix.textContent   = cfg.symbol;
+            elExpDisplay.textContent   = fmt(expenses, cfg.currency);
 
-            elExpDisplay.textContent = formatCurrency(expenses);
+            const taxable   = Math.max(0, gross - expenses);
+            const tax       = taxable * cfg.rate;
+            const quarterly = tax / 4;
+            const net       = Math.max(0, gross - expenses - tax);
 
-            let taxable = Math.max(0, gross - expenses);
-            let tax = taxable * rate;
-            let net = gross - expenses - tax;
+            elTaxable.textContent   = fmt(taxable,   cfg.currency);
+            elTax.textContent       = fmt(tax,        cfg.currency);
+            elQuarterly.textContent = fmt(quarterly,  cfg.currency);
+            elNet.textContent       = fmt(net,         cfg.currency);
 
-            elResTaxable.textContent = formatCurrency(taxable);
-            elResTax.textContent = formatCurrency(tax);
-            elResNet.textContent = formatCurrency(net);
-
-            updateChart(net, tax, expenses);
+            updateChart(net, tax, expenses, cfg.currency);
         };
 
-        const updateChart = (net, tax, expenses) => {
-            const ctx = document.getElementById('financialChart').getContext('2d');
-            const data = [net, tax, expenses];
+        const tooltipLabel = (currency) => (ctx) => {
+            const label = ctx.label ? ctx.label + ': ' : '';
+            return label + fmt(ctx.parsed, currency);
+        };
+
+        const updateChart = (net, tax, expenses, currency) => {
+            const ctx    = document.getElementById('financialChart').getContext('2d');
             const isDark = document.documentElement.classList.contains('dark');
-            const textColor = isDark ? '#f3f4f6' : '#1f2937';
+            const txtCol = isDark ? '#f3f4f6' : '#1f2937';
+            const data   = [net, tax, expenses];
 
             if (myChart) {
-                myChart.data.datasets[0].data = data;
-                myChart.options.plugins.legend.labels.color = textColor;
+                myChart.data.datasets[0].data               = data;
+                myChart.data.datasets[0].borderColor        = isDark ? '#1e293b' : '#ffffff';
+                myChart.options.plugins.legend.labels.color = txtCol;
+                myChart.options.plugins.tooltip.callbacks.label = tooltipLabel(currency);
                 myChart.update();
                 return;
             }
@@ -270,12 +632,8 @@
                 data: {
                     labels: ['Net Profit', 'Estimated Tax', 'Expenses'],
                     datasets: [{
-                        data: data,
-                        backgroundColor: [
-                            'rgba(34, 197, 94, 0.8)',
-                            'rgba(248, 113, 113, 0.8)',
-                            'rgba(156, 163, 175, 0.8)'
-                        ],
+                        data,
+                        backgroundColor: ['rgba(34,197,94,0.8)', 'rgba(248,113,113,0.8)', 'rgba(156,163,175,0.8)'],
                         borderColor: isDark ? '#1e293b' : '#ffffff',
                         borderWidth: 2,
                         hoverOffset: 4
@@ -288,50 +646,28 @@
                     plugins: {
                         legend: {
                             position: 'bottom',
-                            labels: {
-                                color: textColor,
-                                padding: 20,
-                                font: {
-                                    family: "'Inter', sans-serif",
-                                    size: 13
-                                }
-                            }
+                            labels: { color: txtCol, padding: 20, font: { family: "'Inter', sans-serif", size: 13 } }
                         },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
-                                    if (context.parsed !== null) {
-                                        label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(context.parsed);
-                                    }
-                                    return label;
-                                }
-                            }
-                        }
+                        tooltip: { callbacks: { label: tooltipLabel(currency) } }
                     }
                 }
             });
         };
 
-        elCountry.addEventListener('change', calculate);
-        elIncome.addEventListener('input', () => {
-            elExpSlider.max = elIncome.value; 
-            calculate();
-        });
+        // Event listeners
+        elCountry.addEventListener('change', () => { updateTips(elCountry.value); calculate(); });
+        elIncome.addEventListener('input',   () => { elExpSlider.max = elIncome.value; calculate(); });
         elExpSlider.addEventListener('input', calculate);
 
-        const themeToggleBtn = document.getElementById('theme-toggle');
+        // Theme toggle
+        const themeBtn  = document.getElementById('theme-toggle');
         const themeIcon = document.getElementById('theme-icon');
-        const htmlEl = document.documentElement;
-        const bodyEl = document.getElementById('body-bg');
+        const htmlEl    = document.documentElement;
+        const bodyEl    = document.getElementById('body-bg');
 
-        themeToggleBtn.addEventListener('click', () => {
+        themeBtn.addEventListener('click', () => {
             htmlEl.classList.toggle('dark');
             htmlEl.classList.toggle('light');
-            
             if (htmlEl.classList.contains('dark')) {
                 bodyEl.classList.replace('bg-light-theme', 'bg-dark-theme');
                 themeIcon.textContent = '☀️';
@@ -339,31 +675,26 @@
                 bodyEl.classList.replace('bg-dark-theme', 'bg-light-theme');
                 themeIcon.textContent = '🌙';
             }
-            calculate(); 
+            calculate();
         });
 
+        // PDF download
         document.getElementById('download-btn').addEventListener('click', () => {
-            const element = document.getElementById('main-app');
+            const element      = document.getElementById('main-app');
             const originalTheme = htmlEl.classList.contains('dark') ? 'dark' : 'light';
-            
-            htmlEl.classList.remove('dark');
-            htmlEl.classList.add('light');
+            htmlEl.classList.remove('dark'); htmlEl.classList.add('light');
             bodyEl.classList.replace('bg-dark-theme', 'bg-light-theme');
             calculate();
-
             const opt = {
-                margin:       10,
-                filename:     'freelance-tax-estimate.pdf',
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true, logging: false },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' }
+                margin: 10, filename: 'freelance-tax-estimate.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true, logging: false },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
             };
-
             setTimeout(() => {
                 html2pdf().set(opt).from(element).save().then(() => {
-                    if(originalTheme === 'dark') {
-                        htmlEl.classList.remove('light');
-                        htmlEl.classList.add('dark');
+                    if (originalTheme === 'dark') {
+                        htmlEl.classList.remove('light'); htmlEl.classList.add('dark');
                         bodyEl.classList.replace('bg-light-theme', 'bg-dark-theme');
                         calculate();
                     }
@@ -371,9 +702,48 @@
             }, 100);
         });
 
-        elExpSlider.max = elIncome.value;
-        calculate();
+        // Country guide tabs
+        document.getElementById('guide-tabs').addEventListener('click', (e) => {
+            const btn = e.target.closest('.tab-btn');
+            if (!btn) return;
+            document.querySelectorAll('#guide-tabs .tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById(btn.dataset.tab).classList.add('active');
+        });
 
+        // Build FAQ accordion
+        const faqList = document.getElementById('faq-list');
+        faqs.forEach((faq, i) => {
+            const div = document.createElement('div');
+            div.className = 'tip-card';
+            div.innerHTML = `
+                <button class="faq-toggle w-full text-left flex justify-between items-start gap-4 font-medium text-sm" data-idx="${i}">
+                    <span>${faq.q}</span>
+                    <span class="faq-icon flex-shrink-0 text-indigo-500 text-lg leading-none mt-0.5">+</span>
+                </button>
+                <div class="faq-answer text-sm opacity-70" data-idx="${i}">
+                    <div class="pt-3">${faq.a}</div>
+                </div>`;
+            faqList.appendChild(div);
+        });
+
+        faqList.addEventListener('click', (e) => {
+            const btn = e.target.closest('.faq-toggle');
+            if (!btn) return;
+            const idx    = btn.dataset.idx;
+            const answer = faqList.querySelector(`.faq-answer[data-idx="${idx}"]`);
+            const icon   = btn.querySelector('.faq-icon');
+            const isOpen = answer.classList.contains('open');
+            faqList.querySelectorAll('.faq-answer').forEach(a => a.classList.remove('open'));
+            faqList.querySelectorAll('.faq-icon').forEach(ic => ic.textContent = '+');
+            if (!isOpen) { answer.classList.add('open'); icon.textContent = '−'; }
+        });
+
+        // Init
+        elExpSlider.max = elIncome.value;
+        updateTips(elCountry.value);
+        calculate();
     </script>
 </body>
 </html>
