@@ -120,16 +120,20 @@
                 <span class="font-bold text-base tracking-tight">FreelancerTaxEstimator</span>
                 <span class="text-xs ml-2 opacity-40 hidden sm:inline">Free · No signup required</span>
             </div>
-            <div class="flex items-center gap-5">
-                <a href="/privacy.html" class="text-xs opacity-50 hover:opacity-90 transition-opacity">Privacy Policy</a>
+            <nav class="flex items-center gap-4 sm:gap-5 text-xs">
+                <a href="/#guides" class="opacity-60 hover:opacity-100 transition-opacity">Guides</a>
+                <a href="/about.html" class="opacity-60 hover:opacity-100 transition-opacity">About</a>
+                <a href="/contact.html" class="opacity-60 hover:opacity-100 transition-opacity">Contact</a>
+                <a href="/privacy.html" class="opacity-60 hover:opacity-100 transition-opacity hidden sm:inline">Privacy</a>
                 <button id="theme-toggle" class="p-2 rounded-full glass-input hover:opacity-80 transition-all text-base" title="Toggle Dark Mode">
                     <span id="theme-icon">🌙</span>
                 </button>
-            </div>
+            </nav>
         </div>
     </header>
 
-    <!-- Top Ad Unit — replace YOUR_SLOT_ID_1 with your AdSense slot ID -->
+    <!-- Top Ad Unit — temporarily disabled during AdSense review to reduce ad density. Re-enable after approval. -->
+    <!--
     <div class="ad-unit mt-4 mb-2">
         <p class="ad-label">Advertisement</p>
         <ins class="adsbygoogle"
@@ -140,6 +144,7 @@
              data-full-width-responsive="true"></ins>
         <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
     </div>
+    -->
 
     <main>
         <!-- Page intro + Calculator -->
@@ -266,9 +271,10 @@
         </section>
 
         <!-- Country Tax Guides -->
-        <section class="content-section border-t section-divider">
+        <section class="content-section border-t section-divider" id="guides">
             <h2 class="text-2xl md:text-3xl font-bold mb-3">Freelancer Tax Guide by Country</h2>
-            <p class="text-sm opacity-65 mb-6">Tax rules vary significantly for self-employed workers around the world. Here's what you need to know in each region.</p>
+            <p class="text-sm opacity-65 mb-2">Tax rules vary significantly for self-employed workers around the world. Here's what you need to know in each region — or read the full standalone guide for your country.</p>
+            <p class="text-xs opacity-45 mb-6">Last reviewed May 2026 by the Freelancer Tax Estimator editorial team. <a href="/about.html" class="underline hover:opacity-80">How we research these guides</a>.</p>
 
             <div class="flex flex-wrap gap-2 mb-6" id="guide-tabs">
                 <button class="tab-btn active" data-tab="guide-us">United States</button>
@@ -299,6 +305,7 @@
                         <p class="text-sm opacity-75">Freelancers earning above ~$60,000 may benefit from an S-Corp election — paying yourself a "reasonable salary" and taking remaining profits as dividends, reducing exposure to SE tax. Consult a CPA before electing.</p>
                     </div>
                 </div>
+                <a href="/guides/us.html" class="inline-block mt-5 text-sm font-medium text-indigo-500 hover:underline">Read the full United States freelancer tax guide &rarr;</a>
             </div>
 
             <!-- UK -->
@@ -321,6 +328,7 @@
                         <p class="text-sm opacity-75">Claim allowable business expenses including equipment, software, a proportion of home broadband, work travel, and professional training. The £1,000 trading allowance simplifies reporting for lower-income freelancers.</p>
                     </div>
                 </div>
+                <a href="/guides/uk.html" class="inline-block mt-5 text-sm font-medium text-indigo-500 hover:underline">Read the full United Kingdom freelancer tax guide &rarr;</a>
             </div>
 
             <!-- CA -->
@@ -343,6 +351,7 @@
                         <p class="text-sm opacity-75">Deduct a proportion of home office expenses, business vehicle use, professional dues, advertising, and business insurance. RRSP contributions reduce taxable income and are a powerful retirement savings vehicle for freelancers.</p>
                     </div>
                 </div>
+                <a href="/guides/ca.html" class="inline-block mt-5 text-sm font-medium text-indigo-500 hover:underline">Read the full Canada freelancer tax guide &rarr;</a>
             </div>
 
             <!-- AU -->
@@ -365,6 +374,7 @@
                         <p class="text-sm opacity-75">Self-employed Australians are not required to contribute to super. However, voluntary concessional contributions up to the $27,500 annual cap are tax-deductible and provide a powerful long-term tax advantage.</p>
                     </div>
                 </div>
+                <a href="/guides/au.html" class="inline-block mt-5 text-sm font-medium text-indigo-500 hover:underline">Read the full Australia freelancer tax guide &rarr;</a>
             </div>
 
             <!-- DE -->
@@ -387,6 +397,7 @@
                         <p class="text-sm opacity-75">Self-employed individuals in Germany must arrange their own health insurance — either public (gesetzliche Krankenversicherung) or private (private Krankenversicherung). Premiums are partially deductible as Sonderausgaben (special expenses).</p>
                     </div>
                 </div>
+                <a href="/guides/de.html" class="inline-block mt-5 text-sm font-medium text-indigo-500 hover:underline">Read the full Germany freelancer tax guide &rarr;</a>
             </div>
 
             <!-- NZ -->
@@ -409,6 +420,7 @@
                         <p class="text-sm opacity-75">All self-employed New Zealanders pay ACC (Accident Compensation Corporation) levies at approximately $1.60 per $100 of liable earnings, capped at NZD $139,384. File your IR3 individual return by July 7th, or later if registered with a tax agent.</p>
                     </div>
                 </div>
+                <a href="/guides/nz.html" class="inline-block mt-5 text-sm font-medium text-indigo-500 hover:underline">Read the full New Zealand freelancer tax guide &rarr;</a>
             </div>
         </section>
 
@@ -456,7 +468,8 @@
             </div>
         </section>
 
-        <!-- Bottom Ad Unit — ad-3 -->
+        <!-- Bottom Ad Unit — ad-3 — temporarily disabled during AdSense review. Re-enable after approval. -->
+        <!--
         <div class="ad-unit my-8">
             <p class="ad-label">Advertisement</p>
             <ins class="adsbygoogle"
@@ -467,19 +480,24 @@
                  data-full-width-responsive="true"></ins>
             <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
         </div>
+        -->
     </main>
 
     <footer class="border-t section-divider">
-        <div class="max-w-5xl mx-auto px-6 py-8 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div class="max-w-5xl mx-auto px-6 py-8 flex flex-col md:flex-row justify-between items-start gap-6">
             <div>
                 <p class="font-semibold">FreelancerTaxEstimator.com</p>
-                <p class="text-xs opacity-45 mt-1">For informational purposes only. Not professional financial or tax advice.</p>
+                <p class="text-xs opacity-45 mt-1 max-w-sm">An independent, free tax estimation tool for freelancers and sole traders. For informational purposes only — not professional financial or tax advice.</p>
             </div>
-            <div class="flex gap-6 text-sm opacity-55">
+            <div class="flex flex-wrap gap-x-6 gap-y-2 text-sm opacity-55">
+                <a href="/about.html" class="hover:opacity-100 transition-opacity">About</a>
+                <a href="/#guides" class="hover:opacity-100 transition-opacity">Country Guides</a>
+                <a href="/contact.html" class="hover:opacity-100 transition-opacity">Contact</a>
                 <a href="/privacy.html" class="hover:opacity-100 transition-opacity">Privacy Policy</a>
-                <span>&#169; 2025 FreelancerTaxEstimator.com</span>
+                <a href="/terms.html" class="hover:opacity-100 transition-opacity">Terms &amp; Disclaimer</a>
             </div>
         </div>
+        <div class="max-w-5xl mx-auto px-6 pb-6 text-xs opacity-40">&#169; 2026 FreelancerTaxEstimator.com. All rights reserved.</div>
     </footer>
 
     <script>
@@ -740,7 +758,9 @@
             if (!isOpen) { answer.classList.add('open'); icon.textContent = '−'; }
         });
 
-        // Init
+        // Init — allow guide pages to deep-link a country via ?c=US
+        const urlCountry = (new URLSearchParams(location.search).get('c') || '').toUpperCase();
+        if (countryConfig[urlCountry]) elCountry.value = urlCountry;
         elExpSlider.max = elIncome.value;
         updateTips(elCountry.value);
         calculate();
