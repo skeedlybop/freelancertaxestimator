@@ -1,0 +1,176 @@
+---
+title: "Self-Employment Tax Explained (2026): What It Is, Who Owes It"
+description: "What the 15.3% self-employment tax is, how the 92.35% rule works, the 2026 Social Security wage base, the half-SE-tax deduction, and a worked example."
+primaryKeyword: "self employment tax"
+secondaryKeywords:
+  - "how is self employment tax calculated"
+  - "15.3 percent self employment tax"
+  - "se tax 2026"
+  - "social security wage base 2026"
+category: "guides"
+author: "Jason — freelancertaxestimator"
+datePublished: "2026-05-31"
+dateModified: "2026-05-31"
+lastVerified: "2026-05-31"
+relatedSlugs:
+  - "/how-much-to-set-aside-for-taxes-freelancer"
+  - "/quarterly-estimated-taxes-guide"
+schema: "Article"
+---
+
+import {
+  SE_TAX,
+  ADDITIONAL_MEDICARE,
+  SOURCES,
+  TAX_YEAR,
+  calcSelfEmploymentTax,
+  netEarningsFromSE,
+} from "@/data/tax-constants";
+import CalculatorCTA from "@/components/CalculatorCTA.astro";
+import FAQ from "@/components/FAQ.astro";
+import Disclaimer from "@/components/Disclaimer.astro";
+
+# Self-Employment Tax Explained ({TAX_YEAR})
+
+**Self-employment (SE) tax is the Social Security and Medicare tax that self-employed people pay on their net profit.** It is *separate from and on top of* federal income tax. For {TAX_YEAR} the combined rate is **{(SE_TAX.totalRate * 100).toFixed(1)}%** — **{(SE_TAX.socialSecurityRate * 100).toFixed(1)}%** for Social Security (applied to net earnings up to a wage base of **${SE_TAX.socialSecurityWageBase.toLocaleString()}**) and **{(SE_TAX.medicareRate * 100).toFixed(1)}%** for Medicare (no cap, applied to all of it). It's the single biggest reason 1099 income takes home less than the same gross at a W-2 job.
+
+## Why does this tax exist?
+
+Every W-2 employee pays Social Security and Medicare (together called **FICA**), but they only see half of it on their pay stub. The other half is paid by the employer — out of the same compensation budget, just on a different line of the company's books. Combined, the two halves are exactly {(SE_TAX.totalRate * 100).toFixed(1)}%.
+
+When you're self-employed, there is no employer to pay the other half. You are the worker and the employer. The IRS doesn't let you off the hook — they collect both halves from you, and they call the combined thing **self-employment tax**.
+
+So SE tax isn't a *penalty* on self-employed people. It's the same FICA every working American owes — you're just paying both sides of it yourself, which is why it feels so much heavier than it did when you were on W-2.
+
+## The two halves of SE tax in {TAX_YEAR}
+
+| Component | Rate | Applied to |
+|---|---|---|
+| Social Security | {(SE_TAX.socialSecurityRate * 100).toFixed(1)}% | Net earnings, **up to a wage base of ${SE_TAX.socialSecurityWageBase.toLocaleString()}** |
+| Medicare | {(SE_TAX.medicareRate * 100).toFixed(1)}% | Net earnings, **uncapped** |
+| **Combined SE tax** | **{(SE_TAX.totalRate * 100).toFixed(1)}%** | Up to the wage base; only the Medicare {(SE_TAX.medicareRate * 100).toFixed(1)}% applies above it |
+
+A few things to internalize:
+
+- The **{(SE_TAX.socialSecurityRate * 100).toFixed(1)}% Social Security portion has a ceiling.** Once your net earnings cross the wage base (${SE_TAX.socialSecurityWageBase.toLocaleString()} for {TAX_YEAR}), you stop paying it. High earners' SE-tax marginal rate effectively drops from {(SE_TAX.totalRate * 100).toFixed(1)}% to {(SE_TAX.medicareRate * 100).toFixed(1)}% past that threshold.
+- The **{(SE_TAX.medicareRate * 100).toFixed(1)}% Medicare portion has no ceiling.** Every dollar of net earnings pays Medicare, all the way up.
+- High earners also owe an extra **{(ADDITIONAL_MEDICARE.rate * 100).toFixed(1)}% Additional Medicare tax** above filing-status thresholds (more on that below).
+
+## The 92.35% rule (and why your "net earnings" aren't the same as your net profit)
+
+This is the subtle step most freelancers miss when they try to calculate SE tax on the back of an envelope.
+
+SE tax does **not** apply to your full net profit. It applies to **{(SE_TAX.netEarningsMultiplier * 100).toFixed(2)}%** of it. The number $0.{(SE_TAX.netEarningsMultiplier * 10000).toFixed(0)}× is sometimes called "net earnings from self-employment."
+
+Why {(SE_TAX.netEarningsMultiplier * 100).toFixed(2)}%? It's the IRS's algebraic way of correcting for the fact that an employee's half of FICA isn't included in their wages on the employer side. To put a self-employed person on equal footing with a W-2 employee earning the same gross, the IRS deducts {((1 - SE_TAX.netEarningsMultiplier) * 100).toFixed(2)}% of net profit before applying the {(SE_TAX.totalRate * 100).toFixed(1)}% rate. The deduction approximates the "employer's half" your business would have paid in pre-FICA dollars if it were a different entity from you.
+
+You don't need to understand the math to use it. You just need to remember:
+
+> **SE tax = ({(SE_TAX.netEarningsMultiplier * 100).toFixed(2)}% × net profit) × {(SE_TAX.totalRate * 100).toFixed(1)}%** — up to the Social Security wage base, with the {(SE_TAX.medicareRate * 100).toFixed(1)}% Medicare portion continuing above it.
+
+There is also a **floor:** if your net earnings from self-employment are below **${SE_TAX.netEarningsFloor}**, you owe no SE tax at all. That threshold has been ${SE_TAX.netEarningsFloor} since 1990; it does not adjust for inflation.
+
+## A worked example
+
+Let's say your {TAX_YEAR} numbers look like this:
+
+- Gross self-employment income: **$80,000**
+- Business expenses: **$15,000**
+- Net profit: **$65,000**
+
+Step 1 — apply the {(SE_TAX.netEarningsMultiplier * 100).toFixed(2)}% rule:
+
+> Net earnings from SE = $65,000 × {SE_TAX.netEarningsMultiplier.toFixed(4)} = **${netEarningsFromSE(65000).toLocaleString("en-US", { maximumFractionDigits: 0 })}**
+
+Step 2 — apply the rate. Because ${netEarningsFromSE(65000).toLocaleString("en-US", { maximumFractionDigits: 0 })} is well under the **${SE_TAX.socialSecurityWageBase.toLocaleString()}** wage base, the full {(SE_TAX.totalRate * 100).toFixed(1)}% combined rate applies:
+
+> SE tax = ${netEarningsFromSE(65000).toLocaleString("en-US", { maximumFractionDigits: 0 })} × {(SE_TAX.totalRate * 100).toFixed(1)}% ≈ **${Math.round(calcSelfEmploymentTax(65000)).toLocaleString()}**
+
+That's your SE-tax line on Schedule SE. It's separate from any federal income tax you'll also owe on the same profit.
+
+What about somebody with much higher net profit? Say net profit of $250,000:
+
+- Net earnings = $250,000 × {SE_TAX.netEarningsMultiplier.toFixed(4)} = **${Math.round(250000 * SE_TAX.netEarningsMultiplier).toLocaleString()}**
+- Social Security portion: capped at the wage base. {(SE_TAX.socialSecurityRate * 100).toFixed(1)}% × ${SE_TAX.socialSecurityWageBase.toLocaleString()} = **${Math.round(SE_TAX.socialSecurityRate * SE_TAX.socialSecurityWageBase).toLocaleString()}**
+- Medicare portion: {(SE_TAX.medicareRate * 100).toFixed(1)}% × ${Math.round(250000 * SE_TAX.netEarningsMultiplier).toLocaleString()} ≈ **${Math.round(250000 * SE_TAX.netEarningsMultiplier * SE_TAX.medicareRate).toLocaleString()}**
+- Total SE tax: about **${Math.round(calcSelfEmploymentTax(250000)).toLocaleString()}**
+
+Notice that the marginal *SE-tax* rate on the dollar past the wage base is just {(SE_TAX.medicareRate * 100).toFixed(1)}%, not {(SE_TAX.totalRate * 100).toFixed(1)}%. This is why "1099 tax rate" varies so much across income ranges — the SE portion gets cheaper at the top, even as income tax brackets get more expensive.
+
+## The half-SE-tax deduction
+
+Here's a small piece of good news. Because the *employer's* half of FICA would have been a business expense if you had an employer, the IRS lets you deduct **half** of your SE tax against your *income* tax (not against SE tax itself).
+
+It works like this:
+
+1. You compute SE tax in full and pay it.
+2. You also reduce your **Adjusted Gross Income (AGI)** by half of that SE tax. This is an "above-the-line" deduction — it doesn't depend on itemizing.
+3. Your *income tax* is then calculated on the smaller AGI.
+
+For the $65,000-net-profit example above, SE tax was about ${Math.round(calcSelfEmploymentTax(65000)).toLocaleString()}, so your AGI gets reduced by about **${Math.round(calcSelfEmploymentTax(65000) * SE_TAX.deductiblePortion).toLocaleString()}** before income tax is computed. At a 12% federal bracket, that saves you another ~${Math.round(calcSelfEmploymentTax(65000) * SE_TAX.deductiblePortion * 0.12).toLocaleString()} in income tax. Not a fortune — but it's automatic, and the calculator on the home page applies it for you.
+
+The deduction does not reduce your SE tax itself. The IRS still wants the full {(SE_TAX.totalRate * 100).toFixed(1)}% on your net earnings.
+
+## Additional Medicare Tax (for higher earners)
+
+On top of regular SE tax, an **{(ADDITIONAL_MEDICARE.rate * 100).toFixed(1)}% Additional Medicare Tax** applies to wages + SE earnings above a threshold that depends on filing status:
+
+| Filing status | Additional Medicare kicks in above |
+|---|---|
+| Single | ${ADDITIONAL_MEDICARE.thresholds.single.toLocaleString()} |
+| Married filing jointly | ${ADDITIONAL_MEDICARE.thresholds.marriedFilingJointly.toLocaleString()} |
+| Married filing separately | ${ADDITIONAL_MEDICARE.thresholds.marriedFilingSeparately.toLocaleString()} |
+| Head of household | ${ADDITIONAL_MEDICARE.thresholds.headOfHousehold.toLocaleString()} |
+
+A few things to know:
+
+- It applies to *combined* wages + SE earnings, not each separately. A freelancer with $150,000 of net earnings plus $80,000 of W-2 wages crosses the single threshold at $200,000.
+- It is **not** offset by the half-SE-tax deduction.
+- For self-employed people it's paid as part of your regular tax bill; for employees it's typically withheld by the employer on wages above the threshold.
+
+If you're nowhere near these numbers, you can safely ignore this section. If you're approaching them, the [calculator](/) on the home page accounts for it automatically.
+
+<CalculatorCTA>
+  Plug your numbers in and the calculator shows your exact SE tax, the
+  half-SE-tax deduction it triggers, and any Additional Medicare you'd owe.
+</CalculatorCTA>
+
+## Common misunderstandings
+
+- **"SE tax is on top of the highest income tax rate."** No. SE tax is on top of *income* tax, but they're computed separately. SE tax goes on Schedule SE; income tax goes on Form 1040.
+- **"I can deduct SE tax to reduce SE tax."** No. You can deduct *half* of SE tax against *income* tax. SE tax itself is owed in full.
+- **"I'm under $400 so I owe nothing."** You owe no *SE tax* under that floor. You can still owe *income tax* on the same income.
+- **"My LLC means I don't pay SE tax."** A single-member LLC is disregarded for federal tax — you still pay SE tax on its profit. Only an S-corp election separates "reasonable salary" (payroll taxes) from "distributions" (no SE tax). See the eventual LLC vs. sole-prop guide for details.
+
+<FAQ
+  items={[
+    {
+      q: `How is self-employment tax calculated in ${TAX_YEAR}?`,
+      a: `Multiply your net profit by ${(SE_TAX.netEarningsMultiplier * 100).toFixed(2)}% to get net earnings from self-employment. Apply ${(SE_TAX.socialSecurityRate * 100).toFixed(1)}% Social Security up to the $${SE_TAX.socialSecurityWageBase.toLocaleString()} wage base, plus ${(SE_TAX.medicareRate * 100).toFixed(1)}% Medicare on all of it. That's your SE tax. Half of it then reduces your AGI for income-tax purposes.`,
+    },
+    {
+      q: "Is self-employment tax in addition to income tax, or instead of it?",
+      a: "In addition to. SE tax covers Social Security and Medicare. Federal income tax is separate and applies to the same profit (minus half the SE tax). You owe both.",
+    },
+    {
+      q: `Why is the rate 15.3% instead of 7.65%?`,
+      a: `7.65% is the employee's half of FICA. When you're self-employed there's no employer to pay the other 7.65%, so you pay both halves — ${(SE_TAX.totalRate * 100).toFixed(1)}% combined.`,
+    },
+    {
+      q: "Does net profit or gross income get taxed for SE tax purposes?",
+      a: "Net profit. You can deduct ordinary and necessary business expenses (Schedule C) from gross income before SE tax is applied. Then the 92.35% multiplier is applied to net profit, then the rate.",
+    },
+    {
+      q: "Can I reduce SE tax by contributing to a SEP-IRA or Solo 401(k)?",
+      a: "Retirement contributions reduce your federal *income* tax, but they do not reduce your SE tax. SE tax is computed on net profit before retirement deductions.",
+    },
+  ]}
+/>
+
+## Sources
+
+- IRS — <a href={SOURCES.seTax}>Self-Employment Tax (Social Security and Medicare Taxes)</a>
+- IRS — <a href="https://www.irs.gov/forms-pubs/about-schedule-se-form-1040" rel="noopener" target="_blank">Schedule SE (Form 1040) and instructions</a>
+- IRS — <a href="https://www.irs.gov/businesses/small-businesses-self-employed/questions-and-answers-for-the-additional-medicare-tax" rel="noopener" target="_blank">Additional Medicare Tax FAQ</a>
+
+<Disclaimer />
