@@ -14,24 +14,26 @@ lastVerified: "2026-05-31"
 relatedSlugs:
   - "/quarterly-estimated-taxes-guide"
   - "/self-employment-tax-explained"
-  - "/saving-for-taxes-system"
+  - "/freelancer-tax-mistakes"
 schema: "Article"
 ---
 
-{/*
-  PATTERN PAGE — copy this structure for other cornerstone guides.
-  - All tax figures come from `tax-constants.ts` via the <Figure/> usage shown below.
-    Never retype a rate or dollar amount in prose; render it from the constant so a
-    single yearly update flows through every page.
-  - Keep the intro answering the query in the first 2–3 sentences (wins snippet/AIO citation).
-  - End every page with <CalculatorCTA/>, an <FAQ/> block, and <Disclaimer/>.
-  Replace these example imports with your project's real component paths.
-*/}
-
-import { SE_TAX, calcSelfEmploymentTax, SOURCES, TAX_YEAR } from "@/data/tax-constants";
+import {
+  SE_TAX,
+  calcSelfEmploymentTax,
+  estimate,
+  SOURCES,
+  TAX_YEAR,
+} from "@/data/tax-constants";
 import CalculatorCTA from "@/components/CalculatorCTA.astro";
 import FAQ from "@/components/FAQ.astro";
 import Disclaimer from "@/components/Disclaimer.astro";
+
+export const example = estimate({
+  grossSEIncome: 60000,
+  businessExpenses: 0,
+  filingStatus: "single",
+});
 
 # How Much to Set Aside for Taxes as a Freelancer
 
@@ -47,30 +49,68 @@ Your set-aside isn't one fixed rate because it stacks two separate taxes that be
 
 So the honest answer is a *range*, and the only way to get your number is to run your actual income — which is what the calculator does.
 
+## What to set aside at each income level
+
+Because income tax is progressive, your set-aside *rises with your profit*. The table below shows the **federal** set-aside for a single filer with no other income — computed live from the same engine that powers the calculator, using {TAX_YEAR} rates:
+
+<div class="overflow-x-auto my-6">
+  <table class="w-full text-left text-sm">
+    <thead>
+      <tr class="border-b border-slate-300 dark:border-slate-700">
+        <th class="py-2 pr-4">Net profit</th>
+        <th class="py-2 pr-4">Est. federal tax (SE + income)</th>
+        <th class="py-2">Set aside ≈</th>
+      </tr>
+    </thead>
+    <tbody>
+      {[20000, 40000, 60000, 80000, 100000, 150000].map((profit) => {
+        const row = estimate({
+          grossSEIncome: profit,
+          businessExpenses: 0,
+          filingStatus: "single",
+        });
+        return (
+          <tr class="border-b border-slate-200 dark:border-slate-800">
+            <td class="py-2 pr-4 font-semibold">${profit.toLocaleString()}</td>
+            <td class="py-2 pr-4">${Math.round(row.totalTax).toLocaleString()}</td>
+            <td class="py-2">{(row.setAsidePct * 100).toFixed(0)}%</td>
+          </tr>
+        );
+      })}
+    </tbody>
+  </table>
+</div>
+
+Two things to read off this table. First, the percentage climbs steadily — a $20k earner and a $150k earner do **not** set aside the same share, because higher profit pushes more income into higher tax brackets. Second, these are **federal-only** figures: they exclude state income tax (0% in states like Texas or Florida, up to ~13% in California) and assume no W-2 withholding is already covering part of the bill.
+
+That's exactly why the rule-of-thumb range (25–35%) sits *above* the pure federal number — you add your state, then round up for a safety buffer. Under-saving means scrambling for cash in April; over-saving just leaves a little extra in your tax account.
+
 ## A worked example
 
-Say you net **$60,000** in profit after expenses in {TAX_YEAR}.
+Say you net **$60,000** in profit after expenses in {TAX_YEAR}, filing single with no other income:
 
-- SE tax on that profit is about **${Math.round(calcSelfEmploymentTax(60000)).toLocaleString()}** (computed on {(SE_TAX.netEarningsMultiplier * 100).toFixed(2)}% of profit at {(SE_TAX.totalRate * 100).toFixed(1)}%).
-- You also owe federal income tax on your profit *after* subtracting half your SE tax and your standard deduction — typically another 10–12% of profit at this income level.
-- Add state tax if applicable.
+- **Self-employment tax** comes to about **${Math.round(example.seTax).toLocaleString()}** — {(SE_TAX.totalRate * 100).toFixed(1)}% on {(SE_TAX.netEarningsMultiplier * 100).toFixed(2)}% of your profit. ([How SE tax works.](/self-employment-tax-explained))
+- **Federal income tax** is about **${Math.round(example.federalIncomeTax).toLocaleString()}** — lower than the SE tax here, because half your SE tax and the standard deduction come off first.
+- **Federal total ≈ ${Math.round(example.totalTax).toLocaleString()}**, or about **{(example.setAsidePct * 100).toFixed(0)}% of profit.**
 
-For a single filer at $60k with no other income, that lands the total set-aside around **28–32% of profit** — which is why "set aside 30%" is a reasonable starting rule before you refine it.
+Add your state income tax on top and round up for a buffer, and you land in the **25–30%** range — which is why "set aside 30%" is a sensible starting point for a typical full-time freelancer before you refine it with real numbers.
 
 ## How to actually set the money aside
 
-Knowing the number is useless if the cash isn't there in April. The system that works:
+Knowing the number is useless if the cash isn't there when payments are due. The system that works for most freelancers:
 
-1. **Open a separate savings account** just for taxes. Don't commingle it with operating cash.
-2. **Move your percentage off the top of every payment** — the moment a client pays you, transfer your set-aside %. Treat it as money that was never yours.
-3. **Pay quarterly, not annually.** The IRS expects estimated payments through the year; saving it up but skipping the quarterly deadlines can still trigger a penalty. (See the [quarterly estimated taxes guide](/quarterly-estimated-taxes-guide).)
-4. **Recalculate after a big month** so a strong quarter doesn't leave you under-saved.
+1. **Open a separate savings account just for taxes.** Keep it at arm's length from your operating cash — a different bank entirely if you're tempted to dip in. A high-yield savings account is ideal: the money sits for weeks or months between quarterly payments, so it may as well earn interest while it waits.
+2. **Move your percentage off the top of every payment.** The moment a client pays, transfer your set-aside % into that account and treat it as money that was never yours — because it wasn't. Doing it per-invoice, instead of scrambling at quarter-end, is what keeps freelancers solvent at tax time.
+3. **Pay quarterly, not just at year-end.** The IRS operates pay-as-you-go: it expects estimated payments through the year, and saving the money but skipping the quarterly deadlines can still trigger an underpayment penalty. Your savings account is where the money *waits*; the quarterly payment is when it actually leaves. (See the [quarterly estimated taxes guide](/quarterly-estimated-taxes-guide) for the dates and how to pay.)
+4. **Recalculate after any big swing.** A breakout month can push you into a higher bracket; a slow quarter can mean you've over-saved. Re-run your numbers a couple of times a year so your set-aside % tracks reality, not a January guess.
 
 ## Common mistakes
 
-- **Setting aside on revenue instead of profit** — you save on what's left *after* deductible expenses, so track expenses to avoid over-saving.
-- **Forgetting state tax** — easy to budget only for federal and come up short.
-- **Under-saving in year one** — new freelancers often forget SE tax entirely and get a nasty first bill.
+- **Setting aside on revenue instead of profit.** You're taxed on what's left *after* deductible business expenses, not your gross. Applying your percentage to revenue over-saves; track expenses and apply it to profit.
+- **Forgetting state income tax.** The federal table above is only part of the bill. If your state taxes income, budget for it on top — coming up short on state is one of the most common first-year surprises.
+- **Under-saving in year one.** New freelancers routinely forget self-employment tax exists and budget as if they were still on a W-2. That's how a no-withholding first year turns into a five-figure April bill. Build the full {(SE_TAX.totalRate * 100).toFixed(1)}% SE tax into your set-aside from day one.
+- **Saving the money but not paying it.** Stashing 30% away feels responsible, but the IRS still wants the money quarterly. Cash sitting in your account in December does nothing to prevent an underpayment penalty.
+- **Never adjusting the percentage.** A flat 30% is a fine starting point, but a freelancer netting $150k and one netting $30k have very different real rates. Once you've run your actual numbers, set aside *your* percentage — not the rule of thumb.
 
 <CalculatorCTA>
   Don't guess — get your exact set-aside percentage and per-quarter payment in under a minute.
@@ -89,6 +129,14 @@ Knowing the number is useless if the cash isn't there in April. The system that 
     {
       q: "What is self-employment tax?",
       a: `It's the Social Security and Medicare tax self-employed people pay — ${(SE_TAX.totalRate * 100).toFixed(1)}% in ${TAX_YEAR} — because you cover both the employer and employee halves. See the full breakdown in our self-employment tax guide.`,
+    },
+    {
+      q: "Do I need to set aside for state taxes too?",
+      a: "Yes — unless you live in a no-income-tax state such as Texas, Florida, or Washington. State income tax is separate from your federal set-aside and runs from roughly 3% to 13% depending on the state. Add it on top of your federal percentage.",
+    },
+    {
+      q: "How much should I set aside if I also have a W-2 job?",
+      a: "Usually less. Withholding from your W-2 paychecks already covers part of your total tax, so you only need to set aside enough to cover the tax on your freelance profit that isn't already withheld. Enter your W-2 income and withholding in the calculator and it adjusts the percentage for you.",
     },
   ]}
 />

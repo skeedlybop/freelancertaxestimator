@@ -29,7 +29,7 @@ import Disclaimer from "@/components/Disclaimer.astro";
 
 # Quarterly Estimated Taxes — A {TAX_YEAR} Guide for the Self-Employed
 
-**Short version:** if you expect to owe at least $1,000 in federal tax after withholding, the IRS expects you to pre-pay it in four chunks during the year. For tax year {TAX_YEAR}, the four due dates are **{ESTIMATED_TAX_DUE_DATES_2026[0].due.slice(5)}**, **{ESTIMATED_TAX_DUE_DATES_2026[1].due.slice(5)}**, **{ESTIMATED_TAX_DUE_DATES_2026[2].due.slice(5)}**, and **{ESTIMATED_TAX_DUE_DATES_2026[3].due.slice(5)}** (the last one falls in 2027). Miss them and the IRS can charge an underpayment penalty even if you pay your full bill by April.
+**Short version:** if you expect to owe at least $1,000 in federal tax after withholding, the IRS expects you to pre-pay it in four chunks during the year. For tax year {TAX_YEAR}, the four due dates are **{new Date(ESTIMATED_TAX_DUE_DATES_2026[0].due).toLocaleDateString("en-US", { month: "long", day: "numeric" })}**, **{new Date(ESTIMATED_TAX_DUE_DATES_2026[1].due).toLocaleDateString("en-US", { month: "long", day: "numeric" })}**, **{new Date(ESTIMATED_TAX_DUE_DATES_2026[2].due).toLocaleDateString("en-US", { month: "long", day: "numeric" })}**, and **{new Date(ESTIMATED_TAX_DUE_DATES_2026[3].due).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}** (the last one falls in {TAX_YEAR + 1}). Miss them and the IRS can charge an underpayment penalty even if you pay your full bill by April.
 
 ## What "estimated taxes" actually are
 
