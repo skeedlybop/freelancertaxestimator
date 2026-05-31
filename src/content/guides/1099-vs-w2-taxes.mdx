@@ -1,0 +1,148 @@
+---
+title: "1099 vs W-2 Taxes: Why Contractors Take Home Less (2026)"
+description: "A side-by-side look at 1099 vs W-2 taxes in 2026: why the same pay nets a contractor less, where self-employment tax comes from, and how to close the gap."
+primaryKeyword: "1099 vs w2 taxes"
+secondaryKeywords:
+  - "1099 tax rate"
+  - "1099 vs w2 take home pay"
+  - "independent contractor taxes"
+  - "why do 1099 employees pay more taxes"
+category: "guides"
+author: "Jason — freelancertaxestimator"
+datePublished: "2026-05-31"
+dateModified: "2026-05-31"
+lastVerified: "2026-05-31"
+relatedSlugs:
+  - "/self-employment-tax-explained"
+  - "/freelancer-tax-deductions-list"
+  - "/how-much-to-set-aside-for-taxes-freelancer"
+schema: "Article"
+---
+
+import {
+  SE_TAX,
+  STANDARD_DEDUCTION_2026,
+  calcFederalIncomeTax,
+  estimate,
+  SOURCES,
+  TAX_YEAR,
+} from "@/data/tax-constants";
+import CalculatorCTA from "@/components/CalculatorCTA.astro";
+import FAQ from "@/components/FAQ.astro";
+import Disclaimer from "@/components/Disclaimer.astro";
+
+export const GROSS = 70000;
+export const w2IncomeTax = calcFederalIncomeTax(GROSS - STANDARD_DEDUCTION_2026.single, "single");
+export const w2Fica = GROSS * (SE_TAX.totalRate / 2);
+export const contractor = estimate({ grossSEIncome: GROSS, businessExpenses: 0, filingStatus: "single" });
+export const w2Total = w2IncomeTax + w2Fica;
+export const gap = contractor.totalTax - w2Total;
+
+# 1099 vs W-2 Taxes ({TAX_YEAR})
+
+**The core difference: a W-2 job withholds tax from every paycheck and your employer quietly pays half your Social Security and Medicare. A 1099 contractor gets the full amount with nothing withheld — and owes both halves of that payroll tax themselves.** That second half, called self-employment tax, is the single biggest reason the same dollar figure takes home less as a contractor than as an employee.
+
+## Where the difference actually comes from
+
+Every worker owes Social Security and Medicare tax — a combined {(SE_TAX.totalRate * 100).toFixed(1)}% of earnings. The only question is who writes the check:
+
+- **As a W-2 employee,** you pay half ({(SE_TAX.totalRate * 50).toFixed(2)}%) through paycheck withholding and never see the other half — your employer pays it out of the company's budget.
+- **As a 1099 contractor,** you *are* the employer. The IRS collects both halves from you as **self-employment (SE) tax**. ([Full breakdown of SE tax.](/self-employment-tax-explained))
+
+On top of that, a contractor has **no withholding**. A W-2 employee's tax is paid automatically, paycheck by paycheck; a contractor has to estimate and send it themselves through [quarterly estimated payments](/how-much-to-set-aside-for-taxes-freelancer). Same tax system — but the contractor feels every dollar of it because nothing is hidden in the background.
+
+## Side-by-side: the same ${GROSS.toLocaleString()}, two ways
+
+Here's a single filer earning **${GROSS.toLocaleString()}** in {TAX_YEAR} — once as W-2 wages, once as 1099 income with no business expenses, both taking the standard deduction:
+
+<div class="overflow-x-auto my-6">
+  <table class="w-full text-left text-sm">
+    <thead>
+      <tr class="border-b border-slate-300 dark:border-slate-700">
+        <th class="py-2 pr-4">&nbsp;</th>
+        <th class="py-2 pr-4">W-2 employee</th>
+        <th class="py-2">1099 contractor</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="border-b border-slate-200 dark:border-slate-800">
+        <td class="py-2 pr-4 font-semibold">Gross pay</td>
+        <td class="py-2 pr-4">${GROSS.toLocaleString()}</td>
+        <td class="py-2">${GROSS.toLocaleString()}</td>
+      </tr>
+      <tr class="border-b border-slate-200 dark:border-slate-800">
+        <td class="py-2 pr-4 font-semibold">Payroll / SE tax</td>
+        <td class="py-2 pr-4">${Math.round(w2Fica).toLocaleString()} (your half)</td>
+        <td class="py-2">${Math.round(contractor.seTax).toLocaleString()} (both halves)</td>
+      </tr>
+      <tr class="border-b border-slate-200 dark:border-slate-800">
+        <td class="py-2 pr-4 font-semibold">Federal income tax</td>
+        <td class="py-2 pr-4">${Math.round(w2IncomeTax).toLocaleString()}</td>
+        <td class="py-2">${Math.round(contractor.federalIncomeTax).toLocaleString()}</td>
+      </tr>
+      <tr class="border-b border-slate-200 dark:border-slate-800">
+        <td class="py-2 pr-4 font-semibold">Total federal tax</td>
+        <td class="py-2 pr-4 font-semibold">${Math.round(w2Total).toLocaleString()}</td>
+        <td class="py-2 font-semibold">${Math.round(contractor.totalTax).toLocaleString()}</td>
+      </tr>
+      <tr>
+        <td class="py-2 pr-4 font-semibold">Take-home</td>
+        <td class="py-2 pr-4">${Math.round(GROSS - w2Total).toLocaleString()}</td>
+        <td class="py-2">${Math.round(GROSS - contractor.totalTax).toLocaleString()}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+The contractor keeps about **${Math.abs(Math.round(gap)).toLocaleString()} less** on identical pay. Notice the income tax is slightly *lower* on the 1099 side — that's the half-SE-tax deduction at work — but it doesn't come close to offsetting the extra payroll tax. The gap is essentially the employer's half of FICA, which a contractor now shoulders alone.
+
+## Why 1099 income *feels* taxed even more than it is
+
+Two psychological traps make the bill feel bigger than the table above:
+
+1. **Nothing is withheld.** A W-2 employee never holds their tax money, so they never feel like they "lost" it. A contractor receives the full ${GROSS.toLocaleString()}, sees it land in the bank, and then has to give a chunk back — which feels like a loss even though the W-2 worker paid tax too.
+2. **It arrives in lumps.** Four quarterly payments (or one big April bill if you didn't plan) are far more visible than a little skimmed off each paycheck.
+
+The math isn't punishing you for being self-employed. You're paying the same FICA every worker owes — you're just paying both sides of it, in the open, on your own schedule.
+
+## What to do about it
+
+The gap is real, but most of it is recoverable with three moves:
+
+- **Deduct aggressively (and legitimately).** A W-2 employee can't write off their home office, software, or mileage. You can — and every deductible dollar cuts *both* your income tax and your SE tax. This is the contractor's biggest advantage. ([See the full deductions list.](/freelancer-tax-deductions-list))
+- **Set money aside from each payment.** Because nothing is withheld, you have to be your own payroll department. A separate tax savings account and a set-aside percentage off every invoice keep you solvent. ([How much to set aside.](/how-much-to-set-aside-for-taxes-freelancer))
+- **Charge for it.** This is the part freelancers forget: your rate should be *higher* than an equivalent salary precisely because you cover the employer's half of FICA, your own benefits, and unpaid downtime. A $70k salary and a $70k contract are not equivalent offers.
+
+<CalculatorCTA>
+  Curious what your 1099 income really nets after SE tax and income tax? Enter
+  your numbers and the calculator shows your total tax and set-aside in seconds.
+</CalculatorCTA>
+
+<FAQ
+  items={[
+    {
+      q: "Is the 1099 tax rate really higher than W-2?",
+      a: `Not exactly — both owe the same ${(SE_TAX.totalRate * 100).toFixed(1)}% Social Security and Medicare tax and the same income tax brackets. The difference is that a W-2 employer pays half the payroll tax for you, while a 1099 contractor pays both halves as self-employment tax. So a contractor's out-of-pocket tax on the same gross is higher.`,
+    },
+    {
+      q: "Do 1099 contractors pay more income tax than W-2 employees?",
+      a: "No — income tax is identical for the same taxable income. In fact a contractor's income tax can be slightly lower because they deduct half their SE tax and their business expenses. The extra burden is payroll/SE tax, not income tax.",
+    },
+    {
+      q: "How much more should I charge as a 1099 contractor vs a W-2 salary?",
+      a: "A common rule of thumb is 25–50% above an equivalent salary, to cover the employer's half of payroll tax, your own health insurance and retirement, paid time off you no longer get, and gaps between contracts. Run your real numbers rather than matching a salary dollar-for-dollar.",
+    },
+    {
+      q: "Can I be both W-2 and 1099 in the same year?",
+      a: "Yes, and it's common. Your W-2 withholding counts toward your total tax bill, and you only make estimated payments on the freelance portion that isn't already covered. The calculator lets you enter W-2 income and withholding alongside your self-employment income.",
+    },
+  ]}
+/>
+
+## Sources
+
+- IRS — <a href={SOURCES.seTax}>Self-Employment Tax (Social Security and Medicare)</a>
+- IRS — <a href="https://www.irs.gov/businesses/small-businesses-self-employed/independent-contractor-self-employed-or-employee" rel="noopener" target="_blank">Independent Contractor vs. Employee</a>
+- IRS — <a href={SOURCES.estimatedTax}>Estimated Taxes</a>
+
+<Disclaimer />

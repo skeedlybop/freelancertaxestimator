@@ -52,6 +52,23 @@ export const ADDITIONAL_MEDICARE = {
 export const MILEAGE_RATE_BUSINESS = 0.725;
 
 /**
+ * Simplified home-office deduction method (stable since 2013): a flat rate per
+ * square foot of qualifying space, capped at 300 sq ft ($1,500 max).
+ */
+export const SIMPLIFIED_HOME_OFFICE = {
+  ratePerSqFt: 5,
+  maxSqFt: 300,
+  maxDeduction: 1_500,
+} as const;
+
+/**
+ * Payer reporting threshold for Form 1099-NEC. A client must issue a 1099-NEC
+ * when they pay you this much or more in a year. You owe tax on the income
+ * regardless of whether a form is issued.
+ */
+export const FORM_1099_NEC_THRESHOLD = 600;
+
+/**
  * 2026 quarterly estimated tax due dates (ISO).
  * Note: Q4 of tax year 2026 is due in Jan 2027.
  * If a date falls on a weekend/holiday, the deadline shifts to the next business day.
@@ -145,6 +162,10 @@ export const SOURCES = {
     "https://www.irs.gov/newsroom/irs-sets-2026-business-standard-mileage-rate-at-725-cents-per-mile-up-25-cents",
   brackets:
     "https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2026-including-amendments-from-the-one-big-beautiful-bill",
+  homeOffice:
+    "https://www.irs.gov/businesses/small-businesses-self-employed/home-office-deduction",
+  penalty:
+    "https://www.irs.gov/payments/underpayment-of-estimated-tax-by-individuals-penalty",
 } as const;
 
 // ---------------------------------------------------------------------------

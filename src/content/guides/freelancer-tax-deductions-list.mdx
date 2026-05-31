@@ -1,0 +1,133 @@
+---
+title: "Freelancer Tax Deductions: The 2026 Write-Off List"
+description: "Every major tax deduction self-employed people can claim in 2026 — what qualifies, how write-offs cut both income and SE tax, and the ones that draw audit scrutiny."
+primaryKeyword: "freelancer tax deductions"
+secondaryKeywords:
+  - "self employed tax deductions"
+  - "1099 write offs"
+  - "self employed business expenses list"
+  - "tax deductions for independent contractors"
+category: "deductions"
+author: "Jason — freelancertaxestimator"
+datePublished: "2026-05-31"
+dateModified: "2026-05-31"
+lastVerified: "2026-05-31"
+relatedSlugs:
+  - "/self-employment-tax-explained"
+  - "/how-much-to-set-aside-for-taxes-freelancer"
+  - "/1099-vs-w2-taxes"
+schema: "Article"
+---
+
+import {
+  SE_TAX,
+  MILEAGE_RATE_BUSINESS,
+  SOURCES,
+  TAX_YEAR,
+} from "@/data/tax-constants";
+import CalculatorCTA from "@/components/CalculatorCTA.astro";
+import FAQ from "@/components/FAQ.astro";
+import Disclaimer from "@/components/Disclaimer.astro";
+
+# Freelancer Tax Deductions: The {TAX_YEAR} Write-Off List
+
+**A business deduction isn't a discount — it lowers the profit you're taxed on.** And because a self-employed person pays *two* taxes on profit (federal income tax plus {(SE_TAX.totalRate * 100).toFixed(1)}% self-employment tax), a legitimate write-off cuts both. That's why deductions are worth more to a freelancer than to a W-2 employee: a single dollar of deductible expense often saves you 25–35¢. Below is the categorized list of what you can deduct in {TAX_YEAR}, what qualifies, and the handful that draw IRS attention.
+
+## Why a deduction saves a freelancer more than an employee
+
+When you deduct a business expense on **Schedule C**, it reduces your net profit. That smaller profit then flows into *both* tax calculations:
+
+- **Self-employment tax** — {(SE_TAX.totalRate * 100).toFixed(1)}% on {(SE_TAX.netEarningsMultiplier * 100).toFixed(2)}% of profit. A $1,000 deduction trims roughly **${(1000 * SE_TAX.netEarningsMultiplier * SE_TAX.totalRate).toFixed(0)}** off SE tax alone.
+- **Federal income tax** — the same $1,000 also comes off the income your bracket is applied to.
+
+Stack those together and a $1,000 Schedule C deduction saves roughly **$250 at a 12% bracket and $345 at 22%** — far more than the income-tax-only benefit an employee would get for the same spend. ([How SE tax is calculated.](/self-employment-tax-explained))
+
+One important distinction. Most everyday expenses go on **Schedule C** and lower both taxes. A few big ones — the self-employed health insurance deduction, retirement contributions, and the automatic half-of-SE-tax deduction — are **"above-the-line" adjustments on Form 1040**. Those lower your *income* tax but **not** your SE tax. Knowing which bucket an expense lands in tells you exactly how much it's worth.
+
+## The deduction list
+
+### Workspace & equipment
+
+- **Home office** — the part of your home used *regularly and exclusively* for business. Simplified method: $5/sq ft up to 300 sq ft. Actual method: the business-use % of rent, utilities, and insurance.
+- **Computers, phones, cameras, tools** — equipment used for the business. Often deductible in full the year you buy it (Section 179 / de minimis safe harbor) rather than depreciated over years.
+- **Office supplies & furniture** — desks, chairs, paper, the ordinary stuff a business consumes.
+
+### Vehicle & travel
+
+- **Mileage** — business miles at the {TAX_YEAR} standard rate of **{(MILEAGE_RATE_BUSINESS * 100).toFixed(1)}¢ per mile**, or actual vehicle costs by business-use %. You must keep a log; commuting from home to a regular workplace does *not* count.
+- **Business travel** — airfare, lodging, and ground transport for trips away from your tax home for work.
+- **Business meals** — generally **50% deductible** when there's a clear business purpose (a client lunch, not your solo desk coffee).
+
+### Operating costs
+
+- **Software & subscriptions** — design tools, accounting apps, hosting, domain names, stock assets, industry publications.
+- **Phone & internet** — the business-use *percentage* only. If your phone is 60% work, deduct 60%.
+- **Advertising & marketing** — ads, a website, business cards, portfolio hosting, contractor fees for marketing help.
+- **Professional & legal services** — your accountant, bookkeeper, lawyer, and the cost of tax-prep for the business portion of your return.
+- **Bank & merchant fees** — business account fees, payment-processor cuts (Stripe, PayPal), invoicing tools.
+- **Business insurance** — liability, professional indemnity, errors-and-omissions coverage.
+- **Education** — courses, books, and training that maintain or improve skills for your *current* business (not training to enter a new field).
+
+### The big above-the-line adjustments (income tax only)
+
+- **Self-employed health insurance** — premiums for you and your family, deductible against income tax if you're not eligible for an employer plan.
+- **Retirement contributions** — a SEP-IRA or Solo 401(k) can shelter a large share of profit from income tax. These do **not** reduce SE tax, but they're the single biggest lever most profitable freelancers have.
+- **Half of your SE tax** — applied automatically; you don't have to do anything to claim it.
+- **QBI deduction** — many freelancers can also deduct up to 20% of qualified business income. It's calculated on your 1040, has income-based limits, and is worth asking a preparer about.
+
+## Recordkeeping: the unglamorous part that protects the deductions
+
+A deduction you can't substantiate is a deduction you can lose in an audit. The habits that keep you safe:
+
+- **Separate the money.** A dedicated business checking account and card make every transaction self-documenting and keep personal spending from muddying the picture.
+- **Keep receipts and a mileage log.** Snap photos of receipts; log business miles contemporaneously (date, purpose, distance) rather than reconstructing them in April. The IRS expects a real log for vehicle deductions.
+- **Hold records for at least three years** from the filing date — six if you under-reported income substantially. Digital copies are fine.
+
+## The audit-sensitive deductions
+
+None of these are off-limits — they're all legitimate. They just attract scrutiny when they look disproportionate, so claim them honestly and keep proof:
+
+- **Home office.** The "regular and exclusive" test is real. A laptop on the kitchen table doesn't qualify; a dedicated room does.
+- **100% vehicle use.** Claiming a car is used purely for business with no personal miles is rare and invites questions. Track the real split.
+- **Large meals and travel** relative to your income, or anything that looks personal dressed as business.
+- **Continual losses.** A "business" that reports losses year after year can be reclassified as a hobby, which disallows the loss.
+
+When in doubt, the test is the IRS's own standard: an expense must be **ordinary and necessary** for your trade. If it's a normal, helpful cost of doing your specific work, it generally qualifies.
+
+<CalculatorCTA>
+  Deductions lower your net profit — and your tax bill. Enter your income and
+  expenses to see your estimated tax and set-aside percentage instantly.
+</CalculatorCTA>
+
+<FAQ
+  items={[
+    {
+      q: "Do business deductions reduce self-employment tax?",
+      a: "Schedule C expenses do — they lower net profit, which is what both SE tax and income tax are figured on. But above-the-line adjustments like the self-employed health insurance deduction and retirement contributions only reduce income tax, not SE tax.",
+    },
+    {
+      q: "Can I claim business deductions if I take the standard deduction?",
+      a: "Yes. Business expenses go on Schedule C and are completely separate from the standard deduction on your 1040. You can take both — deduct your business costs and still claim the standard deduction.",
+    },
+    {
+      q: "Do I need an LLC to write off business expenses?",
+      a: "No. A sole proprietor (most freelancers) deducts ordinary and necessary business expenses on Schedule C without any LLC or special registration. An LLC changes liability and some tax options, but it isn't required to take deductions.",
+    },
+    {
+      q: `How much is the mileage deduction in ${TAX_YEAR}?`,
+      a: `The business standard mileage rate is ${(MILEAGE_RATE_BUSINESS * 100).toFixed(1)}¢ per mile for ${TAX_YEAR}. Multiply your logged business miles by that rate, or use the actual-expense method instead — but keep a contemporaneous log either way.`,
+    },
+    {
+      q: "What if my business expenses are more than my income?",
+      a: "You'd report a net loss on Schedule C, which can offset other income. But if losses recur year after year, the IRS may treat the activity as a hobby and disallow them — so a loss should reflect a genuine business in a down year.",
+    },
+  ]}
+/>
+
+## Sources
+
+- IRS — <a href={SOURCES.seTax}>Self-Employment Tax (Social Security and Medicare)</a>
+- IRS — <a href="https://www.irs.gov/businesses/small-businesses-self-employed/deducting-business-expenses" rel="noopener" target="_blank">Deducting Business Expenses</a>
+- IRS — <a href={SOURCES.mileage}>{TAX_YEAR} Standard Mileage Rates</a>
+
+<Disclaimer />

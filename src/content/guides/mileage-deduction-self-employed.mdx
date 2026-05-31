@@ -1,0 +1,108 @@
+---
+title: "Self-Employed Mileage Deduction (2026): Rate & Rules"
+description: "The 2026 self-employed mileage deduction: the 72.5¢ standard rate, standard vs actual method, what miles count, and the log the IRS requires to back it up."
+primaryKeyword: "self employed mileage deduction"
+secondaryKeywords:
+  - "2026 mileage rate"
+  - "business mileage deduction freelancer"
+  - "standard mileage vs actual expenses"
+  - "mileage log requirements"
+category: "deductions"
+author: "Jason — freelancertaxestimator"
+datePublished: "2026-05-31"
+dateModified: "2026-05-31"
+lastVerified: "2026-05-31"
+relatedSlugs:
+  - "/freelancer-tax-deductions-list"
+  - "/home-office-deduction-freelancers"
+  - "/self-employment-tax-explained"
+schema: "Article"
+---
+
+import {
+  MILEAGE_RATE_BUSINESS,
+  mileageDeduction,
+  SOURCES,
+  TAX_YEAR,
+} from "@/data/tax-constants";
+import CalculatorCTA from "@/components/CalculatorCTA.astro";
+import FAQ from "@/components/FAQ.astro";
+import Disclaimer from "@/components/Disclaimer.astro";
+
+# Self-Employed Mileage Deduction ({TAX_YEAR})
+
+**If you drive for your business, you can deduct it — and for {TAX_YEAR} the standard mileage rate is {(MILEAGE_RATE_BUSINESS * 100).toFixed(1)}¢ per business mile.** You choose between two methods (standard rate or actual costs), and either way you need a mileage log to back it up. Because the deduction reduces your net profit, it lowers both your income tax and your self-employment tax.
+
+## The {TAX_YEAR} standard mileage rate
+
+The IRS sets a per-mile rate each year that bundles together gas, insurance, maintenance, depreciation, and wear. For {TAX_YEAR} it's **{(MILEAGE_RATE_BUSINESS * 100).toFixed(1)}¢ per mile** driven for business.
+
+> **Example:** 5,000 business miles × {(MILEAGE_RATE_BUSINESS * 100).toFixed(1)}¢ = **${mileageDeduction(5000).toLocaleString()}** deduction. You don't add up gas receipts — the rate covers all of it.
+
+## Standard rate vs actual expenses
+
+You have two ways to deduct vehicle costs, and you pick one:
+
+- **Standard mileage method.** Multiply business miles by the {TAX_YEAR} rate. Simple, requires only a mileage log, and is usually the better deal for fuel-efficient or paid-off cars.
+- **Actual expense method.** Add up all vehicle costs for the year — gas, insurance, repairs, registration, lease or depreciation — then deduct the **business-use percentage**. Better for expensive vehicles, heavy repair years, or low-MPG trucks.
+
+A planning tip: if you want the option to use the standard rate over the life of a car, **choose it in the first year** you use the vehicle for business. You generally can't switch from actual to standard later on a vehicle where you've claimed depreciation.
+
+## Which miles actually count
+
+This is where freelancers most often get it wrong. Deductible business miles include:
+
+- Driving to a client site, meeting, or job
+- Trips to buy supplies or equipment for the business
+- Driving between two work locations
+- Trips to the bank, post office, or accountant for business
+
+**Commuting does not count.** Driving from home to a regular workplace is personal, even if you're self-employed. One useful consequence: if your home is your principal place of business (see the [home office deduction](/home-office-deduction-freelancers)), trips from your home office to clients are business miles from the start — there's no nondeductible commute.
+
+## The mileage log the IRS expects
+
+A deduction you can't substantiate can be disallowed, and vehicle deductions are a common audit target. For each business trip, record:
+
+- **Date**
+- **Destination / purpose** (e.g., "client meeting — Acme Co.")
+- **Miles driven**
+
+Log it **contemporaneously** — at the time of the trip, not reconstructed from memory in April. A phone app that tracks drives automatically is the easiest way; a notebook in the glovebox works too. Also note your odometer reading at the start and end of the year.
+
+## How much it's really worth
+
+Because mileage reduces net profit, it saves you more than income tax alone. On that ${mileageDeduction(5000).toLocaleString()} example deduction, a freelancer also avoids self-employment tax on the same amount — so the real saving is your income-tax bracket *plus* roughly 14% in SE tax. ([How SE tax works.](/self-employment-tax-explained)) See the [full deductions list](/freelancer-tax-deductions-list) for the other write-offs that stack with this one.
+
+<CalculatorCTA>
+  Add your mileage deduction to your business expenses and the calculator shows
+  the tax it saves you, plus your set-aside percentage.
+</CalculatorCTA>
+
+<FAQ
+  items={[
+    {
+      q: `What is the IRS mileage rate for ${TAX_YEAR}?`,
+      a: `${(MILEAGE_RATE_BUSINESS * 100).toFixed(1)}¢ per mile for business driving in ${TAX_YEAR}. Multiply your logged business miles by that rate to get your deduction under the standard method.`,
+    },
+    {
+      q: "Can I deduct my commute as a freelancer?",
+      a: "No. Driving between home and a regular workplace is a personal commute, not a business trip — even for the self-employed. But if your home qualifies as your principal place of business, trips from there to clients count as business miles.",
+    },
+    {
+      q: "Standard mileage or actual expenses — which saves more?",
+      a: "Standard mileage usually wins for efficient or paid-off cars and is far less work. Actual expenses can win for costly vehicles, big repair years, or low gas mileage. Choose the standard rate in a vehicle's first business year to keep both options open.",
+    },
+    {
+      q: "Do I really need a mileage log?",
+      a: "Yes. The IRS can disallow a vehicle deduction with no records. Keep a contemporaneous log of the date, purpose, and miles for each business trip — an automatic tracking app makes this painless.",
+    },
+  ]}
+/>
+
+## Sources
+
+- IRS — <a href={SOURCES.mileage}>{TAX_YEAR} Standard Mileage Rates</a>
+- IRS — <a href="https://www.irs.gov/taxtopics/tc510" rel="noopener" target="_blank">Topic 510 — Business Use of Car</a>
+- IRS — <a href={SOURCES.seTax}>Self-Employment Tax</a>
+
+<Disclaimer />

@@ -1,0 +1,103 @@
+---
+title: "Side Hustle Taxes (2026): Do You Owe on Side Income?"
+description: "When a side hustle triggers taxes in 2026: the $400 self-employment rule, the $600 1099 myth, why a day job under-withholds, and how to cover the gap."
+primaryKeyword: "side hustle taxes"
+secondaryKeywords:
+  - "do I owe taxes on side income"
+  - "side hustle tax rules"
+  - "taxes on second job 1099"
+  - "$400 self employment tax rule"
+category: "guides"
+author: "Jason — freelancertaxestimator"
+datePublished: "2026-05-31"
+dateModified: "2026-05-31"
+lastVerified: "2026-05-31"
+relatedSlugs:
+  - "/1099-vs-w2-taxes"
+  - "/how-much-to-set-aside-for-taxes-freelancer"
+  - "/quarterly-estimated-taxes-guide"
+schema: "Article"
+---
+
+import {
+  SE_TAX,
+  FORM_1099_NEC_THRESHOLD,
+  calcSelfEmploymentTax,
+  SOURCES,
+  TAX_YEAR,
+} from "@/data/tax-constants";
+import CalculatorCTA from "@/components/CalculatorCTA.astro";
+import FAQ from "@/components/FAQ.astro";
+import Disclaimer from "@/components/Disclaimer.astro";
+
+# Side Hustle Taxes ({TAX_YEAR})
+
+**If your side hustle nets $${SE_TAX.netEarningsFloor} or more in profit, you owe self-employment tax on it — and probably income tax too — even with a full-time W-2 job.** The tricky part isn't whether you owe; it's that your day-job paycheck almost certainly isn't withholding enough to cover it. Here's how side-income tax actually works and how to avoid an April surprise.
+
+## The $400 rule vs the $600 myth
+
+Two numbers get confused constantly:
+
+- **$${SE_TAX.netEarningsFloor} — the rule that matters for you.** Once your *net* self-employment earnings hit $${SE_TAX.netEarningsFloor} for the year, self-employment tax applies and you must report the income. This is the real trigger.
+- **$${FORM_1099_NEC_THRESHOLD} — a reporting threshold for the payer, not for you.** A client only has to issue you a **1099-NEC** if they paid you $${FORM_1099_NEC_THRESHOLD}+. But **you owe tax on the income whether or not a form shows up.** No 1099 does not mean no tax — it just means the IRS got no paperwork.
+
+So the question isn't "did I get a 1099?" It's "did my side hustle net $${SE_TAX.netEarningsFloor} or more?"
+
+## Why a day job under-withholds your side income
+
+Your W-2 withholding is calculated as if your salary is your only income. Your side hustle income then **stacks on top** of it — and because the US system is progressive, that side income is taxed at your *highest* marginal rate, not your average one. Two gaps open up:
+
+1. **No SE tax was withheld.** Your employer withholds the employee half of FICA on wages only. Your side hustle owes the full {(SE_TAX.totalRate * 100).toFixed(1)}% SE tax, and none of it was prepaid.
+2. **Income tax was under-withheld.** Your W-4 didn't know about the extra income, so the marginal income tax on your side profit wasn't covered either.
+
+## A quick example
+
+Say you have a W-2 day job and your side hustle nets **$10,000** in profit this year:
+
+- **Self-employment tax:** about **${Math.round(calcSelfEmploymentTax(10000)).toLocaleString()}** ({(SE_TAX.totalRate * 100).toFixed(1)}% on {(SE_TAX.netEarningsMultiplier * 100).toFixed(2)}% of the $10,000).
+- **Income tax:** the $10,000 stacks on top of your wages, so it's taxed at whatever bracket your salary already put you in — often 22% or higher.
+
+Between the two, it's common to owe **30%+** of side-hustle profit in total federal tax — none of which your paycheck withheld. That's why side hustlers who don't plan get a bill instead of a refund. ([Why 1099 income is taxed this way.](/1099-vs-w2-taxes))
+
+## Two ways to cover the gap
+
+You have two clean options — pick one:
+
+- **Bump your W-4 withholding.** Ask your employer to withhold extra from each paycheck (Step 4c on Form W-4 lets you add a flat dollar amount). Withheld money counts as paid evenly across the year, which is simpler than tracking deadlines and sidesteps quarterly payments entirely. Great if your side income is modest and predictable.
+- **Pay quarterly estimated taxes.** Set aside a percentage of each side payment and send it to the IRS four times a year. Better when your side income is larger or lumpy. ([Quarterly estimated taxes guide.](/quarterly-estimated-taxes-guide))
+
+Either way, the habit is the same: treat a chunk of every side payment as the IRS's money, not yours. ([How much to set aside.](/how-much-to-set-aside-for-taxes-freelancer))
+
+<CalculatorCTA>
+  Enter your W-2 income, withholding, and side-hustle profit, and the calculator
+  shows exactly how much extra you owe and what to set aside.
+</CalculatorCTA>
+
+<FAQ
+  items={[
+    {
+      q: "Do I owe taxes on side income if I didn't get a 1099?",
+      a: `Yes. The $${FORM_1099_NEC_THRESHOLD} threshold only decides whether a client must send you a 1099-NEC — it doesn't decide whether you owe tax. If your net self-employment earnings reach $${SE_TAX.netEarningsFloor}, you owe self-employment tax and must report the income regardless of any form.`,
+    },
+    {
+      q: "How much tax will I pay on my side hustle?",
+      a: `Plan for self-employment tax of ${(SE_TAX.totalRate * 100).toFixed(1)}% on ${(SE_TAX.netEarningsMultiplier * 100).toFixed(2)}% of profit, plus income tax at your top marginal bracket since side income stacks on your wages. Many side hustlers set aside 30%+ of profit to be safe.`,
+    },
+    {
+      q: "Should I bump my W-4 or pay quarterly estimates?",
+      a: "Bumping W-4 withholding is simplest for small, steady side income — withheld money is treated as paid evenly across the year. Quarterly estimates are better for larger or unpredictable side income. Both avoid an underpayment penalty if you cover enough.",
+    },
+    {
+      q: "Can I deduct expenses against my side hustle income?",
+      a: "Yes. The same business deductions available to full-time freelancers apply to a side hustle — you're taxed on profit, not gross. Track expenses and they reduce both your income tax and your SE tax.",
+    },
+  ]}
+/>
+
+## Sources
+
+- IRS — <a href={SOURCES.seTax}>Self-Employment Tax (Social Security and Medicare)</a>
+- IRS — <a href={SOURCES.estimatedTax}>Estimated Taxes</a>
+- IRS — <a href="https://www.irs.gov/forms-pubs/about-form-w-4" rel="noopener" target="_blank">About Form W-4 (adjusting withholding)</a>
+
+<Disclaimer />

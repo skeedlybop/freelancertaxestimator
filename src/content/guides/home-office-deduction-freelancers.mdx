@@ -1,0 +1,107 @@
+---
+title: "Home Office Deduction for Freelancers (2026 Guide)"
+description: "How the home office deduction works for the self-employed in 2026: the regular-and-exclusive test, simplified vs actual method, a worked example, and audit tips."
+primaryKeyword: "home office deduction self employed"
+secondaryKeywords:
+  - "home office deduction freelancers"
+  - "simplified home office deduction"
+  - "home office tax write off"
+  - "regular and exclusive use test"
+category: "deductions"
+author: "Jason — freelancertaxestimator"
+datePublished: "2026-05-31"
+dateModified: "2026-05-31"
+lastVerified: "2026-05-31"
+relatedSlugs:
+  - "/freelancer-tax-deductions-list"
+  - "/mileage-deduction-self-employed"
+  - "/self-employment-tax-explained"
+schema: "Article"
+---
+
+import { SIMPLIFIED_HOME_OFFICE, SOURCES, TAX_YEAR } from "@/data/tax-constants";
+import CalculatorCTA from "@/components/CalculatorCTA.astro";
+import FAQ from "@/components/FAQ.astro";
+import Disclaimer from "@/components/Disclaimer.astro";
+
+# Home Office Deduction for Freelancers ({TAX_YEAR})
+
+**If you use part of your home regularly and exclusively for your business, you can deduct it — and as a self-employed person, that write-off cuts both your income tax and your self-employment tax.** There are two ways to claim it: a dead-simple flat-rate method and a more involved actual-expense method. This guide covers who qualifies, how to choose, and a worked example of each.
+
+## The two tests you must pass
+
+The deduction hinges on two words the IRS takes literally:
+
+- **Regular use** — you use the space for business on a continuing basis, not occasionally.
+- **Exclusive use** — that space is used *only* for business. A spare room set up as your office qualifies; the kitchen table where you also eat dinner does not.
+
+The space must also be your **principal place of business** — where you do your main work, or your admin and management. For most freelancers working from home, that's easily met. (A narrow exception drops the exclusive-use rule for licensed daycare providers.)
+
+## Method 1 — Simplified (flat rate)
+
+The simplest option: deduct **\${SIMPLIFIED_HOME_OFFICE.ratePerSqFt} per square foot** of qualifying space, up to **{SIMPLIFIED_HOME_OFFICE.maxSqFt} square feet** — a maximum deduction of **\${SIMPLIFIED_HOME_OFFICE.maxDeduction.toLocaleString()}**.
+
+> **Example:** a 150 sq ft home office → 150 × \${SIMPLIFIED_HOME_OFFICE.ratePerSqFt} = **\${(150 * SIMPLIFIED_HOME_OFFICE.ratePerSqFt).toLocaleString()}** deduction. No receipts, no utility math.
+
+Use this when your space is small, your home costs are modest, or you just want zero paperwork. The trade-off is the {SIMPLIFIED_HOME_OFFICE.maxSqFt}-square-foot cap and the flat rate, which often produce a smaller deduction than the actual method for renters in expensive areas.
+
+## Method 2 — Actual expenses
+
+Here you deduct the **business-use percentage** of your real home costs. Calculate the percentage by dividing your office's square footage by your home's total square footage, then apply it to:
+
+- Rent or mortgage interest
+- Utilities (electric, gas, water)
+- Homeowners or renters insurance
+- Repairs and maintenance that benefit the whole home
+
+> **Example:** a 200 sq ft office in a 1,000 sq ft apartment = **20%** business use. If rent + utilities + insurance run \$30,000/year, your deduction is 20% × \$30,000 = **\$6,000** — well above the simplified cap.
+
+The actual method usually wins for renters with significant housing costs, but it requires keeping records and a bit more math. You can also switch methods year to year, so it's worth running both.
+
+## Which method should you use?
+
+Run the quick comparison: **(your square footage × \${SIMPLIFIED_HOME_OFFICE.ratePerSqFt})** versus **(business-use % × your annual home costs)**. Take the larger one — unless the difference is small and you'd rather skip the recordkeeping the actual method demands. Either way, the deduction reduces your net profit, so it lowers SE tax too. ([See how SE tax is calculated.](/self-employment-tax-explained))
+
+## Keep it audit-proof
+
+The home office is one of the more scrutinized deductions, so protect it:
+
+- **Honor "exclusive use."** Don't claim a room that doubles as a guest bedroom or playroom.
+- **Photograph the space** once it's set up, so you can show it was a dedicated office.
+- **Keep the supporting bills** if you use the actual method — leases, utility statements, insurance.
+
+It's a legitimate, common deduction — claim it confidently, just keep it honest. ([Full list of freelancer deductions.](/freelancer-tax-deductions-list))
+
+<CalculatorCTA>
+  Your home office lowers net profit — and your tax. Add your expenses (including
+  the deduction) to see your estimated tax and set-aside instantly.
+</CalculatorCTA>
+
+<FAQ
+  items={[
+    {
+      q: "Can I take the home office deduction if I rent?",
+      a: "Yes. Renters qualify just like homeowners. With the actual method you deduct the business-use percentage of your rent, utilities, and renters insurance — which often beats the simplified flat rate in high-rent areas.",
+    },
+    {
+      q: `How much is the simplified home office deduction in ${TAX_YEAR}?`,
+      a: `$${SIMPLIFIED_HOME_OFFICE.ratePerSqFt} per square foot of qualifying space, up to ${SIMPLIFIED_HOME_OFFICE.maxSqFt} square feet — a maximum of $${SIMPLIFIED_HOME_OFFICE.maxDeduction.toLocaleString()}. No receipts required.`,
+    },
+    {
+      q: "Does a home office deduction trigger an audit?",
+      a: "It draws more scrutiny than most deductions, but it's perfectly legitimate when you genuinely meet the regular-and-exclusive-use test. Keep a photo of the dedicated space and your supporting bills, and claim it without worry.",
+    },
+    {
+      q: "Can I deduct a home office if I also have a W-2 job?",
+      a: "You can deduct it against your self-employment income if the space is used regularly and exclusively for that business. Employees, however, cannot deduct a home office for their W-2 work under current law — it's a self-employment deduction.",
+    },
+  ]}
+/>
+
+## Sources
+
+- IRS — <a href={SOURCES.homeOffice}>Home Office Deduction</a>
+- IRS — <a href="https://www.irs.gov/businesses/small-businesses-self-employed/simplified-option-for-home-office-deduction" rel="noopener" target="_blank">Simplified Option for Home Office Deduction</a>
+- IRS — <a href={SOURCES.seTax}>Self-Employment Tax</a>
+
+<Disclaimer />

@@ -1,0 +1,59 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//freelancertaxestimator.com//Estimated Tax Dates 2026//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:2026 Estimated Tax Due Dates
+BEGIN:VEVENT
+UID:q1-2026@freelancertaxestimator.com
+DTSTAMP:20260101T000000Z
+DTSTART;VALUE=DATE:20260415
+DTEND;VALUE=DATE:20260416
+SUMMARY:Q1 2026 estimated tax payment due
+DESCRIPTION:Federal estimated tax (Form 1040-ES) for tax year 2026, Q1 (income Jan 1 - Mar 31). Pay via IRS Direct Pay.
+BEGIN:VALARM
+TRIGGER:-P2D
+ACTION:DISPLAY
+DESCRIPTION:Q1 2026 estimated tax due in 2 days
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:q2-2026@freelancertaxestimator.com
+DTSTAMP:20260101T000000Z
+DTSTART;VALUE=DATE:20260615
+DTEND;VALUE=DATE:20260616
+SUMMARY:Q2 2026 estimated tax payment due
+DESCRIPTION:Federal estimated tax (Form 1040-ES) for tax year 2026, Q2 (income Apr 1 - May 31). Pay via IRS Direct Pay.
+BEGIN:VALARM
+TRIGGER:-P2D
+ACTION:DISPLAY
+DESCRIPTION:Q2 2026 estimated tax due in 2 days
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:q3-2026@freelancertaxestimator.com
+DTSTAMP:20260101T000000Z
+DTSTART;VALUE=DATE:20260915
+DTEND;VALUE=DATE:20260916
+SUMMARY:Q3 2026 estimated tax payment due
+DESCRIPTION:Federal estimated tax (Form 1040-ES) for tax year 2026, Q3 (income Jun 1 - Aug 31). Pay via IRS Direct Pay.
+BEGIN:VALARM
+TRIGGER:-P2D
+ACTION:DISPLAY
+DESCRIPTION:Q3 2026 estimated tax due in 2 days
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:q4-2026@freelancertaxestimator.com
+DTSTAMP:20260101T000000Z
+DTSTART;VALUE=DATE:20270115
+DTEND;VALUE=DATE:20270116
+SUMMARY:Q4 2026 estimated tax payment due
+DESCRIPTION:Federal estimated tax (Form 1040-ES) for tax year 2026, Q4 (income Sep 1 - Dec 31). Due Jan 15, 2027. Pay via IRS Direct Pay.
+BEGIN:VALARM
+TRIGGER:-P2D
+ACTION:DISPLAY
+DESCRIPTION:Q4 2026 estimated tax due in 2 days
+END:VALARM
+END:VEVENT
+END:VCALENDAR

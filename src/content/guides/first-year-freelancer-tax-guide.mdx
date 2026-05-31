@@ -1,0 +1,112 @@
+---
+title: "First-Year Freelancer Tax Guide (2026): Start Here"
+description: "Just went freelance? This 2026 walkthrough covers the taxes you now owe, what to track, how much to set aside, when to pay, and how to file — in plain order."
+primaryKeyword: "freelancer taxes for beginners"
+secondaryKeywords:
+  - "first year freelance taxes"
+  - "new freelancer tax guide"
+  - "self employed taxes for beginners"
+  - "what taxes do freelancers pay"
+category: "guides"
+author: "Jason — freelancertaxestimator"
+datePublished: "2026-05-31"
+dateModified: "2026-05-31"
+lastVerified: "2026-05-31"
+relatedSlugs:
+  - "/self-employment-tax-explained"
+  - "/how-much-to-set-aside-for-taxes-freelancer"
+  - "/quarterly-estimated-taxes-guide"
+schema: "Article"
+---
+
+import { SE_TAX, SOURCES, TAX_YEAR } from "@/data/tax-constants";
+import CalculatorCTA from "@/components/CalculatorCTA.astro";
+import FAQ from "@/components/FAQ.astro";
+import Disclaimer from "@/components/Disclaimer.astro";
+
+# First-Year Freelancer Tax Guide ({TAX_YEAR})
+
+**If you just went freelance, the single biggest change is this: no one is withholding tax for you anymore, and you now owe a {(SE_TAX.totalRate * 100).toFixed(1)}% self-employment tax on top of income tax.** Nothing about that is hard once you see it in order — this guide walks through exactly what to do, from your first client payment to filing your first self-employed return.
+
+## What actually changed when you went freelance
+
+On a W-2 job, your employer withheld income tax, paid half your Social Security and Medicare, and sent it all to the IRS automatically. As a freelancer you take all of that over yourself. Two consequences matter:
+
+- **You owe self-employment (SE) tax** — the full {(SE_TAX.totalRate * 100).toFixed(1)}% Social Security + Medicare, because you're now both employer and employee. ([How SE tax works.](/self-employment-tax-explained))
+- **Nothing is withheld** — so you have to set money aside and pay the IRS yourself, usually four times a year.
+
+That's the whole shift. Everything below is just the mechanics of handling it.
+
+## Step 1 — Know which taxes you owe
+
+As a freelancer you generally owe two federal taxes on your profit, plus possibly a third:
+
+1. **Self-employment tax** — {(SE_TAX.totalRate * 100).toFixed(1)}% on {(SE_TAX.netEarningsMultiplier * 100).toFixed(2)}% of net profit.
+2. **Federal income tax** — your normal bracket, on the same profit.
+3. **State income tax** — if your state has one.
+
+Profit, not revenue, is what's taxed — which is why tracking expenses matters from day one.
+
+## Step 2 — Separate and track your money
+
+Open a dedicated business checking account before you do anything else. Run every client payment and business expense through it. This single habit makes your bookkeeping automatic, protects your deductions, and keeps personal spending out of the picture. Then track two things all year: **income received** and **deductible expenses**. ([What you can deduct.](/freelancer-tax-deductions-list))
+
+## Step 3 — Set aside a percentage of every payment
+
+Because nothing is withheld, you're your own payroll department. The moment a client pays you, move a percentage into a separate savings account and treat it as money that was never yours. A reasonable federal starting point is **25–35% of profit**; add your state and round up. ([How much to set aside.](/how-much-to-set-aside-for-taxes-freelancer))
+
+## Step 4 — Pay quarterly
+
+The IRS expects estimated payments through the year, not one lump sum in April. If you'll owe $1,000 or more after withholding, you're in scope. Missing the quarterly deadlines can trigger a penalty even if you pay your full balance later. ([Quarterly estimated taxes guide.](/quarterly-estimated-taxes-guide))
+
+## Step 5 — File your first self-employed return
+
+At tax time you'll file the usual Form 1040 plus two new schedules:
+
+- **Schedule C** — reports your business income and expenses (your profit).
+- **Schedule SE** — calculates your self-employment tax on that profit.
+
+Your quarterly payments are credited against the total, and you settle any difference. If you over-saved, you get a refund; if you under-paid, you owe the gap.
+
+## A simple first-year timeline
+
+- **Now:** open the business account, start tracking, set your set-aside %.
+- **Each payment:** move your percentage into the tax account.
+- **Each quarter:** send an estimated payment to the IRS (and your state, if applicable).
+- **By April {TAX_YEAR + 1}:** file Schedule C + SE and reconcile.
+
+Get those four habits running and your first year is handled. The most common way new freelancers get hurt is skipping Step 3 or Step 4 — see the [biggest first-year mistakes](/freelancer-tax-mistakes) to sidestep them.
+
+<CalculatorCTA>
+  New to all this? Enter your expected income and the calculator does Steps 1, 3,
+  and 4 for you — your tax, your set-aside %, and your next quarterly due date.
+</CalculatorCTA>
+
+<FAQ
+  items={[
+    {
+      q: "Do I have to pay taxes my first year freelancing?",
+      a: `Yes, once your net self-employment earnings reach $${SE_TAX.netEarningsFloor}. At that point self-employment tax applies and you must file, even if your income tax would be small. There's no "first year is free" rule.`,
+    },
+    {
+      q: "When do I start paying quarterly taxes as a new freelancer?",
+      a: "As soon as you expect to owe $1,000 or more in federal tax for the year after any withholding. For someone freelancing full-time, that usually means starting with the first quarterly deadline after your income begins.",
+    },
+    {
+      q: "What forms does a first-year freelancer file?",
+      a: "Form 1040 (your normal return) plus Schedule C for business profit and Schedule SE for self-employment tax. If you paid quarterly estimates, those are credited on the 1040.",
+    },
+    {
+      q: "Do I need an accountant my first year?",
+      a: "Not necessarily — many freelancers handle a straightforward first year themselves. But if you have significant income, multiple income types, or you're unsure about deductions, one session with a CPA early can pay for itself.",
+    },
+  ]}
+/>
+
+## Sources
+
+- IRS — <a href={SOURCES.seTax}>Self-Employment Tax (Social Security and Medicare)</a>
+- IRS — <a href="https://www.irs.gov/businesses/small-businesses-self-employed/self-employed-individuals-tax-center" rel="noopener" target="_blank">Self-Employed Individuals Tax Center</a>
+- IRS — <a href={SOURCES.estimatedTax}>Estimated Taxes</a>
+
+<Disclaimer />

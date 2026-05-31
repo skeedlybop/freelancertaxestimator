@@ -1,0 +1,107 @@
+---
+title: "How to Pay Estimated Taxes Online (2026): Step by Step"
+description: "Exactly how to pay quarterly estimated taxes to the IRS in 2026 — IRS Direct Pay step by step, EFTPS, debit/credit card, and mail, plus how to avoid common errors."
+primaryKeyword: "how to pay quarterly taxes online"
+secondaryKeywords:
+  - "how to pay estimated taxes irs"
+  - "irs direct pay estimated tax"
+  - "pay 1040-ES online"
+  - "eftps estimated tax"
+category: "deadlines"
+author: "Jason — freelancertaxestimator"
+datePublished: "2026-05-31"
+dateModified: "2026-05-31"
+lastVerified: "2026-05-31"
+relatedSlugs:
+  - "/quarterly-estimated-taxes-guide"
+  - "/estimated-tax-penalty-safe-harbor"
+  - "/quarterly-tax-dates-2026"
+schema: "Article"
+---
+
+import { ESTIMATED_TAX_DUE_DATES_2026, SOURCES, TAX_YEAR } from "@/data/tax-constants";
+import CalculatorCTA from "@/components/CalculatorCTA.astro";
+import FAQ from "@/components/FAQ.astro";
+import Disclaimer from "@/components/Disclaimer.astro";
+
+# How to Pay Estimated Taxes Online ({TAX_YEAR})
+
+**The fastest way to pay quarterly estimated taxes is IRS Direct Pay — it's free, needs no account, and confirms in seconds.** This guide walks through the actual screens for each payment method so you can send a payment in the next five minutes, and avoid the small mistakes that cause payments to land in the wrong place. (For *how much* to pay and *when*, see the [quarterly estimated taxes guide](/quarterly-estimated-taxes-guide).)
+
+## Option 1 — IRS Direct Pay (best for most people)
+
+Free, no signup, pulls straight from your bank account. Go to **[irs.gov/payments/direct-pay](https://www.irs.gov/payments/direct-pay)** and:
+
+1. Choose **"Make a Payment."**
+2. For *Reason for Payment*, select **Estimated Tax**.
+3. For *Apply Payment To*, select **1040-ES**.
+4. For *Tax Period*, select **{TAX_YEAR}**. (This is the step people get wrong — see below.)
+5. Verify your identity using a prior-year return (it asks for filing status, name, and address from a past year).
+6. Enter your bank routing and account numbers and the amount.
+7. Submit and **save the confirmation number.** You can also have the receipt emailed to you.
+
+That's it. Direct Pay schedules the debit for the date you choose, up to 365 days out, and you can look up or cancel a scheduled payment with the confirmation number.
+
+## Option 2 — EFTPS (best for scheduling the whole year)
+
+The **Electronic Federal Tax Payment System** ([eftps.gov](https://www.eftps.gov)) is free and government-run, but enrollment requires a **PIN mailed to you** — allow 5–7 business days, so don't start the week a payment is due. Once enrolled, EFTPS lets you:
+
+- Schedule all four quarterly payments at the start of the year.
+- See a full history of every federal payment in one place.
+- Manage payments for multiple entities.
+
+It's the better choice if you want to "set and forget" the full year, or if you run more than one business.
+
+## Option 3 — Debit or credit card
+
+The IRS uses third-party processors (linked from **[irs.gov/payments](https://www.irs.gov/payments)**) that charge a fee — a small flat fee for debit, or roughly 2% for credit. Only worth it if you specifically want the card's rewards or float; otherwise Direct Pay is free.
+
+## Option 4 — Pay by mail with Form 1040-ES
+
+Old-school but allowed. Print the voucher from [Form 1040-ES](https://www.irs.gov/forms-pubs/about-form-1040-es), make a check payable to **"United States Treasury,"** write your SSN and "{TAX_YEAR} Form 1040-ES" on the memo line, and mail it to the address for your state. The IRS treats the **postmark date** as the payment date, so mail a few days early.
+
+## Don't make these mistakes
+
+- **Paying for the wrong year.** A payment you make in **{new Date(ESTIMATED_TAX_DUE_DATES_2026[3].due).toLocaleDateString("en-US", { month: "long", year: "numeric" })}** for the Q4 deadline applies to tax year **{TAX_YEAR}**, not {TAX_YEAR + 1}. Direct Pay will ask — choose carefully.
+- **Choosing the wrong reason.** Estimated payments must be tagged **Estimated Tax / 1040-ES**, not "Tax Return" or "Balance Due," or they may post to the wrong account.
+- **Not saving the confirmation.** It's your only proof until the payment shows on your IRS account. Screenshot or save the email.
+- **Forgetting your state.** This pays the IRS only. Most income-tax states have their own separate online portal.
+
+## When to pay
+
+The {TAX_YEAR} federal deadlines are **{new Date(ESTIMATED_TAX_DUE_DATES_2026[0].due).toLocaleDateString("en-US", { month: "long", day: "numeric" })}**, **{new Date(ESTIMATED_TAX_DUE_DATES_2026[1].due).toLocaleDateString("en-US", { month: "long", day: "numeric" })}**, **{new Date(ESTIMATED_TAX_DUE_DATES_2026[2].due).toLocaleDateString("en-US", { month: "long", day: "numeric" })}**, and **{new Date(ESTIMATED_TAX_DUE_DATES_2026[3].due).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}**. Pay on or before each date — payments are credited per quarter, so paying late in one quarter can cost you even if you catch up later. ([How the penalty and safe harbor work.](/estimated-tax-penalty-safe-harbor))
+
+<CalculatorCTA>
+  Not sure what amount to enter? Run your numbers and the calculator returns your
+  per-quarter payment and next due date — then pay it with Direct Pay.
+</CalculatorCTA>
+
+<FAQ
+  items={[
+    {
+      q: "What's the easiest way to pay quarterly taxes?",
+      a: "IRS Direct Pay. It's free, requires no enrollment, pulls from your bank account, and gives an instant confirmation number. Choose 'Estimated Tax' and '1040-ES' and select the correct tax year.",
+    },
+    {
+      q: "Direct Pay or EFTPS — which should I use?",
+      a: "Direct Pay for one-off quarterly payments with no setup. EFTPS if you want to schedule all four payments at once or track a full payment history — but enrollment needs a PIN mailed to you, so set it up well ahead of a deadline.",
+    },
+    {
+      q: "Is there a fee to pay estimated taxes online?",
+      a: "No fee with Direct Pay or EFTPS (both pull from a bank account). Debit and credit card payments go through third-party processors that charge a fee — a small flat amount for debit, around 2% for credit.",
+    },
+    {
+      q: "How do I know my payment went through?",
+      a: "Save the confirmation number Direct Pay or EFTPS gives you, and optionally the emailed receipt. The payment will also appear in your IRS online account, usually within a few days.",
+    },
+  ]}
+/>
+
+## Sources
+
+- IRS — <a href="https://www.irs.gov/payments/direct-pay" rel="noopener" target="_blank">Direct Pay</a>
+- IRS — <a href="https://www.irs.gov/payments" rel="noopener" target="_blank">Payments (all methods)</a>
+- IRS — <a href={SOURCES.estimatedTax}>Estimated Taxes</a>
+- IRS — <a href="https://www.irs.gov/forms-pubs/about-form-1040-es" rel="noopener" target="_blank">About Form 1040-ES</a>
+
+<Disclaimer />

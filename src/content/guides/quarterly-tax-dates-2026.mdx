@@ -1,0 +1,110 @@
+---
+title: "2026 Quarterly Estimated Tax Due Dates (+ Calendar)"
+description: "The four 2026 quarterly estimated tax deadlines at a glance, what each payment covers, the weekend rule, and a downloadable calendar reminder for every date."
+primaryKeyword: "2026 estimated tax deadlines"
+secondaryKeywords:
+  - "quarterly tax dates 2026"
+  - "1040-ES due dates 2026"
+  - "estimated tax payment schedule 2026"
+  - "when are estimated taxes due 2026"
+category: "deadlines"
+author: "Jason — freelancertaxestimator"
+datePublished: "2026-05-31"
+dateModified: "2026-05-31"
+lastVerified: "2026-05-31"
+relatedSlugs:
+  - "/quarterly-estimated-taxes-guide"
+  - "/how-to-pay-estimated-taxes-irs"
+  - "/estimated-tax-penalty-safe-harbor"
+schema: "Article"
+---
+
+import { ESTIMATED_TAX_DUE_DATES_2026, TAX_YEAR, SOURCES } from "@/data/tax-constants";
+import CalculatorCTA from "@/components/CalculatorCTA.astro";
+import FAQ from "@/components/FAQ.astro";
+import Disclaimer from "@/components/Disclaimer.astro";
+
+# {TAX_YEAR} Quarterly Estimated Tax Due Dates
+
+**The four {TAX_YEAR} federal estimated tax deadlines are {new Date(ESTIMATED_TAX_DUE_DATES_2026[0].due).toLocaleDateString("en-US", { month: "long", day: "numeric" })}, {new Date(ESTIMATED_TAX_DUE_DATES_2026[1].due).toLocaleDateString("en-US", { month: "long", day: "numeric" })}, {new Date(ESTIMATED_TAX_DUE_DATES_2026[2].due).toLocaleDateString("en-US", { month: "long", day: "numeric" })}, and {new Date(ESTIMATED_TAX_DUE_DATES_2026[3].due).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}.** Note that the final payment for tax year {TAX_YEAR} lands in January {TAX_YEAR + 1}. This is the quick-reference version — for the full how and why, see the [complete quarterly taxes guide](/quarterly-estimated-taxes-guide).
+
+## The {TAX_YEAR} schedule at a glance
+
+<div class="overflow-x-auto my-6">
+  <table class="w-full text-left text-sm">
+    <thead>
+      <tr class="border-b border-slate-300 dark:border-slate-700">
+        <th class="py-2 pr-4">Quarter</th>
+        <th class="py-2 pr-4">Income period</th>
+        <th class="py-2">Payment due</th>
+      </tr>
+    </thead>
+    <tbody>
+      {ESTIMATED_TAX_DUE_DATES_2026.map((d) => (
+        <tr class="border-b border-slate-200 dark:border-slate-800">
+          <td class="py-2 pr-4 font-semibold">{d.quarter}</td>
+          <td class="py-2 pr-4">{d.periodCovered}</td>
+          <td class="py-2 font-semibold">
+            {new Date(d.due).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
+<p class="my-6">
+  <a
+    href="/quarterly-tax-dates-2026.ics"
+    download
+    class="inline-block rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white no-underline hover:bg-indigo-700"
+  >
+    ⬇ Add all four dates to your calendar (.ics)
+  </a>
+</p>
+
+The download adds each deadline to Apple Calendar, Google Calendar, or Outlook with a reminder two days before.
+
+## A few things to know about these dates
+
+- **The quarters aren't equal.** Q1 covers three months, Q2 only two (April–May), Q3 three, and Q4 four (September–December). Most people still just pay a quarter of their annual estimate each time.
+- **Q4 is due in January.** It's easy to assume the last payment rolls into your April return — it doesn't. It's due **{new Date(ESTIMATED_TAX_DUE_DATES_2026[3].due).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}**, and it applies to tax year **{TAX_YEAR}**.
+- **Weekend and holiday shifts.** If a date falls on a Saturday, Sunday, or federal holiday, the deadline moves to the next business day.
+- **State deadlines may differ.** Most income-tax states want their own estimated payments, sometimes on a different schedule. These dates are federal only.
+
+## Don't miss one
+
+Payments are credited quarter-by-quarter, so a late payment in one quarter can trigger a penalty even if you catch up later. The fix is simple: know your number, and pay on time. ([How to pay in five minutes.](/how-to-pay-estimated-taxes-irs)) ([How the penalty and safe harbor work.](/estimated-tax-penalty-safe-harbor))
+
+<CalculatorCTA>
+  Know the dates — now get the amount. Enter your income to see your per-quarter
+  payment and which deadline is next.
+</CalculatorCTA>
+
+<FAQ
+  items={[
+    {
+      q: `When are estimated taxes due in ${TAX_YEAR}?`,
+      a: `The four federal deadlines are ${new Date(ESTIMATED_TAX_DUE_DATES_2026[0].due).toLocaleDateString("en-US", { month: "long", day: "numeric" })}, ${new Date(ESTIMATED_TAX_DUE_DATES_2026[1].due).toLocaleDateString("en-US", { month: "long", day: "numeric" })}, ${new Date(ESTIMATED_TAX_DUE_DATES_2026[2].due).toLocaleDateString("en-US", { month: "long", day: "numeric" })}, and ${new Date(ESTIMATED_TAX_DUE_DATES_2026[3].due).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}.`,
+    },
+    {
+      q: `Why is the last 2026 payment due in ${TAX_YEAR + 1}?`,
+      a: `The Q4 period covers September through December ${TAX_YEAR}, and the IRS sets its deadline about two weeks after the period ends — January ${TAX_YEAR + 1}. It still applies to your ${TAX_YEAR} tax year, so select ${TAX_YEAR} when you pay.`,
+    },
+    {
+      q: "What if a due date is on a weekend?",
+      a: "If a deadline falls on a Saturday, Sunday, or federal holiday, it shifts to the next business day. Paying on the official date listed above is always safe.",
+    },
+  ]}
+/>
+
+## Sources
+
+- IRS — <a href={SOURCES.estimatedTax}>Estimated Taxes</a>
+- IRS — <a href="https://www.irs.gov/forms-pubs/about-form-1040-es" rel="noopener" target="_blank">About Form 1040-ES</a>
+
+<Disclaimer />

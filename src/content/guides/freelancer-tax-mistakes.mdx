@@ -1,0 +1,105 @@
+---
+title: "7 Freelancer Tax Mistakes (and How to Fix Each) — 2026"
+description: "The most common self-employed tax mistakes in 2026 — skipping quarterly payments, under-saving, missed deductions, ignoring state tax — and the fix for each one."
+primaryKeyword: "freelancer tax mistakes"
+secondaryKeywords:
+  - "self employed tax mistakes"
+  - "common 1099 tax errors"
+  - "freelance tax tips"
+  - "estimated tax mistakes"
+category: "guides"
+author: "Jason — freelancertaxestimator"
+datePublished: "2026-05-31"
+dateModified: "2026-05-31"
+lastVerified: "2026-05-31"
+relatedSlugs:
+  - "/how-much-to-set-aside-for-taxes-freelancer"
+  - "/quarterly-estimated-taxes-guide"
+  - "/freelancer-tax-deductions-list"
+schema: "Article"
+---
+
+import { SE_TAX, SAFE_HARBOR, SOURCES, TAX_YEAR } from "@/data/tax-constants";
+import CalculatorCTA from "@/components/CalculatorCTA.astro";
+import FAQ from "@/components/FAQ.astro";
+import Disclaimer from "@/components/Disclaimer.astro";
+
+# 7 Freelancer Tax Mistakes (and How to Fix Each)
+
+**Most freelancer tax pain comes from a short list of avoidable mistakes — and nearly all of them trace back to one root cause: no employer is handling tax for you anymore.** No withholding, no payroll department, no automatic Social Security and Medicare. Here are the seven that cost self-employed people the most in {TAX_YEAR}, each with the fix.
+
+## 1. Assuming the money in your account is yours
+
+**The mistake:** treating a $5,000 client payment as $5,000 of spendable income. A big chunk of it belongs to the IRS — you just haven't sent it yet. This is the error every other mistake on this list grows out of.
+
+**The fix:** mentally (and physically) split every payment the moment it lands. A portion is income; a portion is tax you're holding in trust. Build that habit before you build anything else.
+
+## 2. Skipping quarterly estimated payments
+
+**The mistake:** waiting until April to pay the whole year's tax. The US system is pay-as-you-go, and if you expect to owe $1,000 or more after withholding, the IRS wants four payments during the year. Skip them and you can owe an **underpayment penalty** even if you pay your full balance on time in April.
+
+**The fix:** pay quarterly. The simplest safe path is the prior-year **safe harbor** — pay {(SAFE_HARBOR.priorYearPct * 100).toFixed(0)}% of last year's tax across the four quarters ({(SAFE_HARBOR.priorYearPctHighIncome * 100).toFixed(0)}% if your prior-year AGI topped ${SAFE_HARBOR.highIncomeAGIThreshold.toLocaleString()}) and you avoid the penalty entirely. ([Quarterly estimated taxes guide.](/quarterly-estimated-taxes-guide))
+
+## 3. Setting aside too little
+
+**The mistake:** saving 10–15% "for taxes," the way a lightly-taxed W-2 worker might think about it — and forgetting that self-employment tax alone is {(SE_TAX.totalRate * 100).toFixed(1)}% before any income tax. Come April, the set-aside is half of what's owed.
+
+**The fix:** start at roughly **25–35% of profit** for federal, then add state and round up for a buffer. Run your actual numbers rather than guessing. ([How much to set aside.](/how-much-to-set-aside-for-taxes-freelancer))
+
+## 4. Mixing personal and business money
+
+**The mistake:** running income and expenses through one personal account. At tax time you can't tell a client payment from a Venmo from your sister, or a software subscription from a streaming one — so deductions get missed and the picture is impossible to defend in an audit.
+
+**The fix:** open a dedicated business checking account and card. Route all business income and spending through it. Every transaction becomes self-documenting, bookkeeping takes minutes instead of days, and your deductions hold up.
+
+## 5. Leaving deductions on the table
+
+**The mistake:** not tracking expenses, so you pay tax on more profit than you actually earned. Because a deduction lowers *both* your income tax and your SE tax, every missed write-off is taxed roughly 25–35¢ on the dollar more than it should be.
+
+**The fix:** track expenses all year and claim everything legitimate — home office, mileage, software, phone/internet percentage, health insurance, retirement. The list is longer than most freelancers realize. ([Full deductions list.](/freelancer-tax-deductions-list))
+
+## 6. Ignoring state income tax
+
+**The mistake:** budgeting only for federal tax. Most states with an income tax want their own return *and* their own estimated payments, often on a different schedule than the IRS. A freelancer who saved a perfect federal percentage can still come up short.
+
+**The fix:** check your state's rules early. If your state taxes income, add its rate to your set-aside and find out whether it wants quarterly payments too. (No-income-tax states like Texas, Florida, and Washington are the exception.)
+
+## 7. Keeping no records
+
+**The mistake:** reconstructing a year of income and mileage from memory in April. Missing receipts mean missing deductions, and a vehicle deduction with no log is one the IRS can disallow outright.
+
+**The fix:** keep contemporaneous records — snap receipts as you go, log business miles when you drive them, and save digital copies for at least three years. A simple spreadsheet or an app is plenty; the point is that it happens *during* the year, not after.
+
+<CalculatorCTA>
+  Avoid the biggest mistake of all — guessing. Enter your income and expenses to
+  see your real tax bill, set-aside percentage, and next quarterly due date.
+</CalculatorCTA>
+
+<FAQ
+  items={[
+    {
+      q: "What's the most common freelancer tax mistake?",
+      a: "Under-saving. Many new freelancers set aside a W-2-sized percentage and forget that self-employment tax adds 15.3% on top of income tax. Setting aside 25–35% of profit and paying quarterly prevents the most painful version of this.",
+    },
+    {
+      q: "What happens if I forget to pay quarterly estimated taxes?",
+      a: `The IRS can charge an underpayment penalty, calculated quarter-by-quarter, even if you pay your full balance in April. You avoid it by hitting a safe harbor — typically pre-paying ${(SAFE_HARBOR.priorYearPct * 100).toFixed(0)}% of your prior-year tax across the four quarters.`,
+    },
+    {
+      q: "Do I have to file taxes if my freelance income was small?",
+      a: "Generally yes once net self-employment earnings reach $400 — that's the threshold where SE tax kicks in and a return is required, even if you'd owe little or no income tax. Below that, filing may still be worthwhile to claim refundable credits.",
+    },
+    {
+      q: "Can I fix a quarter I already underpaid?",
+      a: "You can't undo a missed quarter, but you can reduce the damage by paying as soon as possible — the penalty accrues like interest, so the sooner the money is in, the smaller it is. Catching up the next quarter also limits how long it compounds.",
+    },
+  ]}
+/>
+
+## Sources
+
+- IRS — <a href={SOURCES.estimatedTax}>Estimated Taxes</a>
+- IRS — <a href={SOURCES.seTax}>Self-Employment Tax (Social Security and Medicare)</a>
+- IRS — <a href="https://www.irs.gov/businesses/small-businesses-self-employed/recordkeeping" rel="noopener" target="_blank">Recordkeeping for Small Businesses</a>
+
+<Disclaimer />
