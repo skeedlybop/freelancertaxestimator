@@ -1,0 +1,101 @@
+---
+title: "How Much to Set Aside for Taxes as a Freelancer (2026)"
+description: "A clear answer to how much self-employed people should save for taxes in 2026, with the math, a worked example, and the exact percentage to set aside."
+primaryKeyword: "how much to set aside for taxes self employed"
+secondaryKeywords:
+  - "freelancer tax percentage"
+  - "how much should I save for taxes 1099"
+  - "self employed tax savings percentage"
+category: "guides"
+author: "Jason — freelancertaxestimator"
+datePublished: "2026-05-31"
+dateModified: "2026-05-31"
+lastVerified: "2026-05-31"
+relatedSlugs:
+  - "/quarterly-estimated-taxes-guide"
+  - "/self-employment-tax-explained"
+  - "/saving-for-taxes-system"
+schema: "Article"
+---
+
+{/*
+  PATTERN PAGE — copy this structure for other cornerstone guides.
+  - All tax figures come from `tax-constants.ts` via the <Figure/> usage shown below.
+    Never retype a rate or dollar amount in prose; render it from the constant so a
+    single yearly update flows through every page.
+  - Keep the intro answering the query in the first 2–3 sentences (wins snippet/AIO citation).
+  - End every page with <CalculatorCTA/>, an <FAQ/> block, and <Disclaimer/>.
+  Replace these example imports with your project's real component paths.
+*/}
+
+import { SE_TAX, calcSelfEmploymentTax, SOURCES, TAX_YEAR } from "@/data/tax-constants";
+import CalculatorCTA from "@/components/CalculatorCTA.astro";
+import FAQ from "@/components/FAQ.astro";
+import Disclaimer from "@/components/Disclaimer.astro";
+
+# How Much to Set Aside for Taxes as a Freelancer
+
+**The short answer:** most freelancers should set aside **25–35% of every dollar of profit** for taxes. If you want one number to start with, **30%** is a safe default for a typical full-time freelancer — then adjust up or down once you run your real figures. Two things make up that bill: self-employment tax (a flat {(SE_TAX.totalRate * 100).toFixed(1)}% in {TAX_YEAR}) and federal income tax (which depends on your bracket), plus state income tax if your state has one.
+
+## Why there's no single percentage
+
+Your set-aside isn't one fixed rate because it stacks two separate taxes that behave differently:
+
+- **Self-employment (SE) tax** is predictable. In {TAX_YEAR} it's {(SE_TAX.totalRate * 100).toFixed(1)}% — {(SE_TAX.socialSecurityRate * 100).toFixed(1)}% for Social Security (up to a wage base of ${SE_TAX.socialSecurityWageBase.toLocaleString()}) and {(SE_TAX.medicareRate * 100).toFixed(1)}% for Medicare (no cap). It applies to {(SE_TAX.netEarningsMultiplier * 100).toFixed(2)}% of your net profit.
+- **Federal income tax** is progressive. A freelancer netting $30,000 sits in a low bracket; one netting $120,000 owes a much larger share. This is the part that pushes your total set-aside from the low 20s toward the mid 30s.
+- **State income tax** adds anywhere from 0% (e.g. no-income-tax states) to ~13% depending on where you live.
+
+So the honest answer is a *range*, and the only way to get your number is to run your actual income — which is what the calculator does.
+
+## A worked example
+
+Say you net **$60,000** in profit after expenses in {TAX_YEAR}.
+
+- SE tax on that profit is about **${Math.round(calcSelfEmploymentTax(60000)).toLocaleString()}** (computed on {(SE_TAX.netEarningsMultiplier * 100).toFixed(2)}% of profit at {(SE_TAX.totalRate * 100).toFixed(1)}%).
+- You also owe federal income tax on your profit *after* subtracting half your SE tax and your standard deduction — typically another 10–12% of profit at this income level.
+- Add state tax if applicable.
+
+For a single filer at $60k with no other income, that lands the total set-aside around **28–32% of profit** — which is why "set aside 30%" is a reasonable starting rule before you refine it.
+
+## How to actually set the money aside
+
+Knowing the number is useless if the cash isn't there in April. The system that works:
+
+1. **Open a separate savings account** just for taxes. Don't commingle it with operating cash.
+2. **Move your percentage off the top of every payment** — the moment a client pays you, transfer your set-aside %. Treat it as money that was never yours.
+3. **Pay quarterly, not annually.** The IRS expects estimated payments through the year; saving it up but skipping the quarterly deadlines can still trigger a penalty. (See the [quarterly estimated taxes guide](/quarterly-estimated-taxes-guide).)
+4. **Recalculate after a big month** so a strong quarter doesn't leave you under-saved.
+
+## Common mistakes
+
+- **Setting aside on revenue instead of profit** — you save on what's left *after* deductible expenses, so track expenses to avoid over-saving.
+- **Forgetting state tax** — easy to budget only for federal and come up short.
+- **Under-saving in year one** — new freelancers often forget SE tax entirely and get a nasty first bill.
+
+<CalculatorCTA>
+  Don't guess — get your exact set-aside percentage and per-quarter payment in under a minute.
+</CalculatorCTA>
+
+<FAQ
+  items={[
+    {
+      q: "Is 30% enough to set aside for taxes?",
+      a: `For many full-time freelancers, yes — 30% of profit is a solid starting point in ${TAX_YEAR}. Higher earners and those in high-tax states should lean toward 35%. Run your real numbers to confirm.`,
+    },
+    {
+      q: "Do I set aside based on income or profit?",
+      a: "Profit. You're taxed on what's left after deductible business expenses, so apply your percentage to net profit, not gross revenue.",
+    },
+    {
+      q: "What is self-employment tax?",
+      a: `It's the Social Security and Medicare tax self-employed people pay — ${(SE_TAX.totalRate * 100).toFixed(1)}% in ${TAX_YEAR} — because you cover both the employer and employee halves. See the full breakdown in our self-employment tax guide.`,
+    },
+  ]}
+/>
+
+## Sources
+
+- IRS — <a href={SOURCES.seTax}>Self-Employment Tax (Social Security and Medicare)</a>
+- IRS — <a href={SOURCES.estimatedTax}>Estimated Tax</a>
+
+<Disclaimer />

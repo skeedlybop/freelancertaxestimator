@@ -1,0 +1,99 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { LAST_VERIFIED, TAX_YEAR } from "@/data/tax-constants";
+---
+
+<BaseLayout
+  title="Disclaimer — Freelancer Tax Estimator"
+  description="Full disclaimer: FreelancerTaxEstimator is informational only and is not tax, legal, or financial advice. Always consult a qualified tax professional."
+>
+  <article class="prose-content px-4 py-10">
+    <h1>Disclaimer</h1>
+    <p class="text-sm text-slate-500 dark:text-slate-400">
+      Last reviewed {LAST_VERIFIED}.
+    </p>
+
+    <h2>Informational only — not advice</h2>
+    <p>
+      Everything on FreelancerTaxEstimator.com — the calculator's outputs, the
+      cornerstone guides, and the supporting articles — is provided for{" "}
+      <strong>general educational and planning purposes only</strong>. It is
+      not tax, legal, accounting, or financial advice, and no professional
+      relationship is formed by your use of the site.
+    </p>
+    <p>
+      Use the results to think more clearly about your tax situation — not as
+      the basis for what you actually file or pay. Before making any filing or
+      payment decision, consult a qualified tax professional (CPA, Enrolled
+      Agent, or attorney) who can review your specific circumstances.
+    </p>
+
+    <h2>Why a tax estimator can't be a tax return</h2>
+    <p>
+      Real federal returns depend on dozens of facts the estimator does not ask
+      about, including (but not limited to):
+    </p>
+    <ul>
+      <li>
+        The QBI deduction under §199A (up to 20% of qualified business income;
+        with phase-outs, SSTB rules, W-2 wage limits, etc.)
+      </li>
+      <li>
+        Itemized vs. standard deduction choice; SALT cap; mortgage interest;
+        charitable contributions
+      </li>
+      <li>
+        Tax credits (Child Tax Credit, EITC, Premium Tax Credit, education
+        credits, energy credits, etc.)
+      </li>
+      <li>
+        Retirement plan contributions for the self-employed (SEP, SIMPLE, Solo
+        401(k)) and their interaction with SE tax and AGI
+      </li>
+      <li>
+        Self-employed health insurance deduction and HSA contributions
+      </li>
+      <li>S-corp election effects on payroll vs. distribution split</li>
+      <li>
+        Net operating losses, depreciation method choices, §179 expensing,
+        bonus depreciation
+      </li>
+      <li>State and local income tax</li>
+      <li>Alternative Minimum Tax (AMT) for certain higher earners</li>
+    </ul>
+
+    <h2>Year and source</h2>
+    <p>
+      Unless otherwise noted, figures on this site apply to <strong>tax
+      year {TAX_YEAR}</strong>, sourced from IRS publications and verified on{" "}
+      <strong>{LAST_VERIFIED}</strong>. Tax law can and does change mid-year.
+      Always confirm the current value at IRS.gov.
+    </p>
+
+    <h2>No warranty</h2>
+    <p>
+      The site is provided "as is" without warranty of any kind. To the maximum
+      extent permitted by law, the operators of the site are not liable for any
+      losses, penalties, interest, or other damages arising from your use of
+      the site or reliance on its content.
+    </p>
+
+    <h2>Find a qualified professional</h2>
+    <p>
+      You can find a credentialed preparer using the official IRS{" "}
+      <a
+        href="https://irs.treasury.gov/rpo/rpo.jsf"
+        rel="noopener nofollow"
+        target="_blank"
+        >Directory of Federal Tax Return Preparers with Credentials and Select
+        Qualifications</a
+      >. Look for CPAs, Enrolled Agents, or tax attorneys for self-employment
+      situations.
+    </p>
+
+    <p class="mt-8 text-sm text-slate-500 dark:text-slate-400">
+      A short version of this disclaimer is shown beside the calculator on
+      every page that uses it.
+    </p>
+  </article>
+</BaseLayout>

@@ -1,0 +1,176 @@
+---
+import "@/styles/global.css";
+
+export interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  ogType?: "website" | "article";
+  noindex?: boolean;
+  jsonLd?: Record<string, unknown> | Array<Record<string, unknown>>;
+}
+
+const {
+  title,
+  description,
+  canonical,
+  ogType = "website",
+  noindex = false,
+  jsonLd,
+} = Astro.props;
+
+const siteUrl = "https://freelancertaxestimator.com";
+const canonicalUrl =
+  canonical ??
+  (new URL(Astro.url.pathname, siteUrl).toString().replace(/\/$/, "") || siteUrl);
+
+const navLinks = [
+  { href: "/", label: "Calculator" },
+  { href: "/guides", label: "Guides" },
+  { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact" },
+];
+
+const footerLinks = [
+  { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact" },
+  { href: "/privacy-policy", label: "Privacy" },
+  { href: "/terms", label: "Terms" },
+  { href: "/disclaimer", label: "Disclaimer" },
+];
+
+const websiteLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Freelancer Tax Estimator",
+  url: siteUrl,
+};
+
+const ldArray = jsonLd
+  ? Array.isArray(jsonLd)
+    ? jsonLd
+    : [jsonLd]
+  : [];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    {noindex && <meta name="robots" content="noindex,nofollow" />}
+
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:type" content={ogType} />
+    <meta name="twitter:card" content="summary" />
+
+    <script
+      is:inline
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1848064915651660"
+      crossorigin="anonymous"></script>
+
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify(websiteLd)}
+    />
+    {
+      ldArray.map((node) => (
+        <script
+          is:inline
+          type="application/ld+json"
+          set:html={JSON.stringify(node)}
+        />
+      ))
+    }
+
+    <script is:inline>
+      (function () {
+        try {
+          const stored = localStorage.getItem("theme");
+          const prefersDark =
+            window.matchMedia &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches;
+          if (stored === "dark" || (!stored && prefersDark)) {
+            document.documentElement.classList.add("dark");
+          }
+        } catch (e) {}
+      })();
+    </script>
+
+    <link rel="sitemap" href="/sitemap-index.xml" />
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <header
+      class="sticky top-0 z-40 border-b border-slate-200 bg-white/90 backdrop-blur dark:border-slate-800 dark:bg-slate-950/80"
+    >
+      <div class="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
+        <a href="/" class="font-bold tracking-tight">FreelancerTaxEstimator</a>
+        <nav class="flex items-center gap-4 text-sm">
+          {
+            navLinks.map((link) => (
+              <a
+                href={link.href}
+                class="opacity-70 hover:opacity-100 transition-opacity"
+              >
+                {link.label}
+              </a>
+            ))
+          }
+          <button
+            id="theme-toggle"
+            type="button"
+            aria-label="Toggle dark mode"
+            class="rounded-full border border-slate-300 px-2 py-1 text-xs hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800"
+          >
+            <span class="hidden dark:inline">☀</span>
+            <span class="dark:hidden">🌙</span>
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <main class="flex-1">
+      <slot />
+    </main>
+
+    <footer class="mt-16 border-t border-slate-200 dark:border-slate-800">
+      <div class="mx-auto max-w-5xl px-4 py-8 text-sm text-slate-600 dark:text-slate-400">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <p>
+            © {new Date().getFullYear()} FreelancerTaxEstimator. US federal tax
+            estimates only — informational, not advice.
+          </p>
+          <nav class="flex flex-wrap gap-4">
+            {
+              footerLinks.map((link) => (
+                <a
+                  href={link.href}
+                  class="hover:text-slate-900 dark:hover:text-slate-100"
+                >
+                  {link.label}
+                </a>
+              ))
+            }
+          </nav>
+        </div>
+      </div>
+    </footer>
+
+    <script is:inline>
+      document.getElementById("theme-toggle")?.addEventListener("click", () => {
+        const root = document.documentElement;
+        const isDark = root.classList.toggle("dark");
+        try {
+          localStorage.setItem("theme", isDark ? "dark" : "light");
+        } catch (e) {}
+      });
+    </script>
+  </body>
+</html>

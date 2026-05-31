@@ -1,0 +1,107 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { LAST_VERIFIED } from "@/data/tax-constants";
+---
+
+<BaseLayout
+  title="Terms of Use — Freelancer Tax Estimator"
+  description="Terms of use for FreelancerTaxEstimator: what the site is, what it isn't, and the limits of liability that apply to your use of the calculator and guides."
+>
+  <article class="prose-content px-4 py-10">
+    <h1>Terms of Use</h1>
+    <p class="text-sm text-slate-500 dark:text-slate-400">
+      Last updated {LAST_VERIFIED}.
+    </p>
+
+    <p>
+      By accessing or using FreelancerTaxEstimator.com (the "site"), you agree
+      to these Terms of Use. If you do not agree, do not use the site.
+    </p>
+
+    <h2>1. Informational use only</h2>
+    <p>
+      The calculator and articles on this site are provided for general
+      educational and planning purposes. They do not constitute tax, legal,
+      accounting, or financial advice, and no relationship — including a
+      preparer-client relationship — is created by your use of the site. See
+      our <a href="/disclaimer">full disclaimer</a>.
+    </p>
+
+    <h2>2. Accuracy and limitations</h2>
+    <p>
+      We strive to keep the figures, rates, and dates on this site accurate and
+      sourced to authoritative publications (primarily IRS.gov). Even so:
+    </p>
+    <ul>
+      <li>
+        Tax law, IRS guidance, and inflation adjustments change. Figures on
+        this site may not reflect the most recent change.
+      </li>
+      <li>
+        The calculator uses simplifying assumptions (no QBI deduction, no
+        itemized deductions, no credits, etc.). Real returns are more
+        complicated.
+      </li>
+      <li>
+        We make no warranty, express or implied, that the site is suitable for
+        any particular purpose.
+      </li>
+    </ul>
+
+    <h2>3. No liability</h2>
+    <p>
+      To the maximum extent permitted by law, the site and its operators are
+      not liable for any direct, indirect, incidental, consequential, or
+      special damages arising from your use of the site or reliance on
+      information found here, including but not limited to underpayment or
+      overpayment of tax, penalties, or interest.
+    </p>
+
+    <h2>4. Third-party links and ads</h2>
+    <p>
+      The site contains links to third-party websites and serves
+      advertisements through Google AdSense. We do not endorse and are not
+      responsible for the content, accuracy, or practices of any third-party
+      site or advertiser.
+    </p>
+
+    <h2>5. Acceptable use</h2>
+    <p>You agree not to:</p>
+    <ul>
+      <li>
+        Use automated tools to scrape the site at a rate that degrades service
+        for others.
+      </li>
+      <li>
+        Reproduce substantial portions of the site's content elsewhere without
+        attribution and a link back to the original.
+      </li>
+      <li>
+        Interfere with the site's normal operation or attempt to bypass any
+        security mechanism.
+      </li>
+    </ul>
+
+    <h2>6. Changes</h2>
+    <p>
+      We may modify the site or these terms at any time. Material changes will
+      be noted by updating the "last updated" date above. Continued use of the
+      site after a change indicates acceptance.
+    </p>
+
+    <h2>7. Governing law</h2>
+    <p>
+      These terms are governed by the laws of the United States. Disputes will
+      be resolved in the courts of the operator's place of residence, except
+      where applicable law requires otherwise.
+    </p>
+
+    <h2>8. Contact</h2>
+    <p>
+      Questions about these terms:{" "}
+      <a href="mailto:hello@freelancertaxestimator.com"
+        >hello@freelancertaxestimator.com</a
+      >.
+    </p>
+  </article>
+</BaseLayout>

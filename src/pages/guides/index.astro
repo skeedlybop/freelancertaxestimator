@@ -1,0 +1,68 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+
+const guides = (await getCollection("guides")).sort(
+  (a, b) =>
+    new Date(b.data.datePublished).valueOf() -
+    new Date(a.data.datePublished).valueOf(),
+);
+
+const byCategory = guides.reduce<Record<string, typeof guides>>((acc, g) => {
+  const k = g.data.category;
+  (acc[k] ||= []).push(g);
+  return acc;
+}, {});
+
+const categoryOrder = ["guides", "deadlines", "deductions", "how-it-works"] as const;
+---
+
+<BaseLayout
+  title="Freelancer Tax Guides — US Federal"
+  description="Plain-English guides to US federal taxes for freelancers: self-employment tax, quarterly estimated payments, deductions, deadlines, and avoiding penalties."
+>
+  <section class="mx-auto max-w-3xl px-4 py-10">
+    <h1 class="mb-3 text-3xl font-extrabold tracking-tight md:text-4xl">
+      Freelancer Tax Guides
+    </h1>
+    <p class="mb-8 text-slate-600 dark:text-slate-400">
+      Plain-English, IRS-sourced guides for US freelancers and self-employed.
+      Updated for the current tax year.
+    </p>
+
+    {
+      guides.length === 0 && (
+        <p class="rounded-xl border border-slate-200 bg-white p-6 text-slate-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300">
+          New guides are publishing soon. In the meantime, try the{" "}
+          <a href="/" class="text-indigo-600 underline dark:text-indigo-400">
+            calculator
+          </a>{" "}
+          on the home page.
+        </p>
+      )
+    }
+
+    {
+      categoryOrder.map(
+        (cat) =>
+          byCategory[cat] && (
+            <section class="mb-10">
+              <h2 class="mb-3 text-xl font-bold capitalize">{cat.replace(/-/g, " ")}</h2>
+              <ul class="space-y-3">
+                {byCategory[cat].map((g) => (
+                  <li class="card p-4">
+                    <a href={`/${g.slug}`} class="block">
+                      <p class="text-lg font-semibold">{g.data.title}</p>
+                      <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">
+                        {g.data.description}
+                      </p>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ),
+      )
+    }
+  </section>
+</BaseLayout>

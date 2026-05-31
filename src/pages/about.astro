@@ -1,0 +1,114 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { LAST_VERIFIED } from "@/data/tax-constants";
+---
+
+<BaseLayout
+  title="About — Freelancer Tax Estimator"
+  description="About FreelancerTaxEstimator: who runs it, how the calculator works, our sourcing standards, and the limits of what an estimator can do."
+>
+  <article class="prose-content px-4 py-10">
+    <h1>About</h1>
+    <p class="text-sm text-slate-500 dark:text-slate-400">
+      Last reviewed {LAST_VERIFIED}.
+    </p>
+
+    <h2>What this site is</h2>
+    <p>
+      FreelancerTaxEstimator.com is a free, ad-supported planning tool for US
+      freelancers and self-employed workers. The core utility is a federal tax
+      estimator that walks the same calculation the IRS uses — self-employment
+      tax, the ½-SE deduction, federal income tax across the current brackets,
+      and the Additional Medicare tax — and tells you a concrete <em>set-aside
+      percentage</em> and <em>per-quarter payment</em>.
+    </p>
+    <p>
+      The site has a deliberately narrow scope: <strong>US federal tax for
+      self-employed individuals</strong>. We do not cover business returns
+      (1120/1120-S/1065), C-corp planning, or non-US tax systems. That focus is
+      how the figures and guides stay accurate enough to be useful.
+    </p>
+
+    <h2>Who runs it</h2>
+    <p>
+      The site is independently operated and edited by Jason. The guides and
+      calculator are written and maintained by one person who reads the
+      underlying IRS publications and Revenue Procedures, rather than by a
+      content farm rewriting other people's blog posts. If something on the
+      site is wrong or out of date, that's on me — please{" "}
+      <a href="/contact">tell me</a> and I will fix it.
+    </p>
+
+    <h2>How figures stay accurate</h2>
+    <p>
+      Every dollar amount, rate, and date on this site comes from a single
+      source-of-truth file (<code>tax-constants.ts</code>) that is verified
+      against IRS.gov. The whole site reads from that file — when a figure
+      changes, it updates everywhere at once. The current values were verified
+      on <strong>{LAST_VERIFIED}</strong>. Primary sources used:
+    </p>
+    <ul>
+      <li>
+        IRS Rev. Proc. 2025-32 (2026 inflation adjustments, including the
+        post-OBBBA bracket and standard-deduction changes)
+      </li>
+      <li>IRS — Self-Employment Tax (Social Security and Medicare)</li>
+      <li>IRS — Estimated Tax (Form 1040-ES and quarterly due dates)</li>
+      <li>
+        IRS — 2026 business standard mileage rate (effective Jan 1, 2026)
+      </li>
+    </ul>
+    <p>
+      Every content page that cites a number links the source. If you find a
+      number on this site without a source link, that's a bug — please report
+      it.
+    </p>
+
+    <h2>What we don't do</h2>
+    <ul>
+      <li>
+        <strong>We don't give advice.</strong> The calculator and articles are
+        educational; they don't know your specific situation. For filing
+        decisions, hire a CPA or Enrolled Agent.
+      </li>
+      <li>
+        <strong>We don't store your inputs.</strong> The calculator runs
+        entirely in your browser. Nothing you type is sent to a server.
+      </li>
+      <li>
+        <strong>We don't sell affiliate "best tax software" listicles.</strong>{" "}
+        The site is monetized by Google AdSense; we don't take payment to
+        recommend products.
+      </li>
+    </ul>
+
+    <h2>Methodology limits</h2>
+    <p>The estimator deliberately simplifies a few things:</p>
+    <ul>
+      <li>
+        It uses the standard deduction for your filing status; it doesn't model
+        itemized deductions.
+      </li>
+      <li>
+        It doesn't compute the QBI deduction (§199A) — that one is
+        situation-specific and we'd rather not return a wrong number than a
+        rough one.
+      </li>
+      <li>
+        State tax is a single user-entered effective rate, not a state-by-state
+        engine.
+      </li>
+      <li>It does not handle credits (CTC, EITC, premium tax credit, etc.).</li>
+    </ul>
+    <p>
+      The result is a strong planning number, not a filing number. See the{" "}
+      <a href="/disclaimer">full disclaimer</a>.
+    </p>
+
+    <h2>Contact</h2>
+    <p>
+      Found a bug, a number that needs updating, or a topic we should cover?
+      The <a href="/contact">contact page</a> has details.
+    </p>
+  </article>
+</BaseLayout>

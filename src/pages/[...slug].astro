@@ -1,0 +1,85 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getCollection, type CollectionEntry } from "astro:content";
+
+export async function getStaticPaths() {
+  const guides = await getCollection("guides");
+  return guides.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<"guides">;
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+const data = entry.data;
+
+const articleLd = {
+  "@context": "https://schema.org",
+  "@type": data.schema,
+  headline: data.title,
+  description: data.description,
+  author: { "@type": "Person", name: data.author },
+  datePublished: data.datePublished,
+  dateModified: data.dateModified,
+  mainEntityOfPage: {
+    "@type": "WebPage",
+    "@id": `https://freelancertaxestimator.com/${entry.slug}`,
+  },
+};
+---
+
+<BaseLayout
+  title={data.title}
+  description={data.description}
+  ogType="article"
+  jsonLd={articleLd}
+>
+  <article class="prose-content px-4 py-10">
+    <p class="mb-2 text-xs uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
+      {data.category}
+    </p>
+    <p class="text-sm text-slate-500 dark:text-slate-400">
+      By {data.author} ·{" "}
+      <time datetime={data.dateModified}>
+        Updated {new Date(data.dateModified).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        })}
+      </time>
+      {
+        data.lastVerified && (
+          <>
+            {" "}· <span>Figures verified {data.lastVerified}</span>
+          </>
+        )
+      }
+    </p>
+
+    <Content />
+
+    {
+      data.relatedSlugs.length > 0 && (
+        <section class="mt-12 border-t border-slate-200 pt-6 dark:border-slate-800">
+          <p class="mb-3 text-sm font-semibold uppercase tracking-wider opacity-70">
+            Related
+          </p>
+          <ul class="space-y-1">
+            {data.relatedSlugs.map((slug) => (
+              <li>
+                <a href={slug} class="text-indigo-600 underline hover:no-underline dark:text-indigo-400">
+                  {slug.replace(/^\//, "").replace(/-/g, " ")}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+  </article>
+</BaseLayout>

@@ -1,0 +1,112 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Calculator from "@/components/Calculator.astro";
+import { getCollection } from "astro:content";
+import { TAX_YEAR, LAST_VERIFIED } from "@/data/tax-constants";
+
+const guides = (await getCollection("guides")).sort(
+  (a, b) =>
+    new Date(b.data.datePublished).valueOf() -
+    new Date(a.data.datePublished).valueOf(),
+);
+
+const appLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: "Freelancer Tax Estimator",
+  url: "https://freelancertaxestimator.com",
+  description:
+    "Free US federal tax estimator for freelancers and self-employed. Estimates self-employment tax, federal income tax, set-aside percentage, and quarterly payments using IRS-verified 2026 figures.",
+  applicationCategory: "FinanceApplication",
+  operatingSystem: "Web",
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+};
+---
+
+<BaseLayout
+  title={`Freelancer Tax Estimator — Free ${TAX_YEAR} US Self-Employed Calculator`}
+  description={`Free US federal tax estimator for freelancers. Self-employment tax, income tax, set-aside %, and quarterly payments using IRS-verified ${TAX_YEAR} figures.`}
+  jsonLd={appLd}
+>
+  <section class="mx-auto max-w-5xl px-4 pt-10 pb-2 text-center">
+    <h1 class="mx-auto max-w-3xl text-3xl font-extrabold tracking-tight md:text-5xl">
+      Freelancer Tax Estimator
+    </h1>
+    <p
+      class="mx-auto mt-3 max-w-2xl text-base text-slate-600 md:text-lg dark:text-slate-400"
+    >
+      US federal tax estimate for freelancers and self-employed — self-employment tax,
+      income tax, set-aside %, and per-quarter payment, using IRS-verified {TAX_YEAR} figures.
+    </p>
+    <p class="mt-2 text-xs text-slate-500 dark:text-slate-400">
+      Free · No signup · Runs entirely in your browser · Last verified {LAST_VERIFIED}
+    </p>
+  </section>
+
+  <Calculator />
+
+  <section class="mx-auto max-w-3xl px-4 py-12">
+    <h2 class="mb-3 text-2xl font-bold">How the math works</h2>
+    <p class="mb-4 text-slate-700 dark:text-slate-300">
+      Most freelancer tax tools give a single flat-rate guess and call it a
+      day. This one walks the full federal calculation the way the IRS does:
+    </p>
+    <ol
+      class="ml-5 list-decimal space-y-2 text-slate-700 dark:text-slate-300"
+    >
+      <li>
+        <strong>Net profit</strong> = gross self-employment income − business expenses
+        (use the mileage helper for vehicle use).
+      </li>
+      <li>
+        <strong>SE tax</strong> = 15.3% × 92.35% of net profit (Social Security
+        capped at the {TAX_YEAR} wage base; Medicare uncapped).
+      </li>
+      <li>
+        <strong>AGI</strong> = net profit + W-2 wages − ½ of SE tax (the
+        above-the-line deduction).
+      </li>
+      <li>
+        <strong>Taxable income</strong> = AGI − standard deduction for your
+        filing status.
+      </li>
+      <li>
+        <strong>Federal income tax</strong> = applied across the {TAX_YEAR} brackets
+        from IRS Rev. Proc. 2025-32 (post-OBBBA).
+      </li>
+      <li>
+        <strong>Additional Medicare</strong> (0.9%) if earned income exceeds the
+        filing-status threshold.
+      </li>
+      <li>
+        <strong>Set-aside %</strong> = (total tax − W-2 withholding) ÷ net
+        profit. <strong>Per quarter</strong> = ÷ 4.
+      </li>
+    </ol>
+    <p class="mt-4 text-sm text-slate-600 dark:text-slate-400">
+      What it doesn't include: QBI deduction (§199A), itemized deductions,
+      credits, and most state-specific rules. Use the state field for a rough
+      add-on and consult a tax professional before filing.
+    </p>
+  </section>
+
+  {
+    guides.length > 0 && (
+      <section class="mx-auto max-w-3xl px-4 py-6">
+        <h2 class="mb-4 text-2xl font-bold">Guides</h2>
+        <ul class="space-y-3">
+          {guides.map((g) => (
+            <li class="card p-4">
+              <a href={`/${g.slug}`} class="block">
+                <p class="text-lg font-semibold">{g.data.title}</p>
+                <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">
+                  {g.data.description}
+                </p>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+</BaseLayout>

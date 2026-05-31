@@ -4,3 +4,14 @@
 !.dev.vars.example
 .env*
 !.env.example
+
+# astro / node
+node_modules/
+dist/
+.astro/
+
+# os
+.DS_Store
+
+# local editor / harness config
+.claude/

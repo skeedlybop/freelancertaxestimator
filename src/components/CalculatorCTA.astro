@@ -1,0 +1,21 @@
+---
+export interface Props {
+  href?: string;
+  label?: string;
+}
+const { href = "/#calculator", label = "Open the calculator" } = Astro.props;
+---
+
+<aside
+  class="my-10 flex flex-col items-start gap-3 rounded-2xl border border-indigo-200 bg-indigo-50 p-5 text-slate-900 sm:flex-row sm:items-center sm:justify-between dark:border-indigo-900/60 dark:bg-indigo-950/40 dark:text-slate-100"
+>
+  <p class="text-base font-medium">
+    <slot>Get your exact set-aside percentage and per-quarter payment in under a minute.</slot>
+  </p>
+  <a
+    href={href}
+    class="shrink-0 rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700"
+  >
+    {label} →
+  </a>
+</aside>

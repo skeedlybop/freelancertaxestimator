@@ -1,0 +1,307 @@
+---
+import { LAST_VERIFIED, TAX_YEAR } from "@/data/tax-constants";
+---
+
+<section id="calculator" class="mx-auto max-w-5xl px-4 py-8 scroll-mt-20">
+  <div class="card p-5 md:p-8">
+    <div class="mb-6 flex flex-wrap items-end justify-between gap-2">
+      <h2 class="text-xl font-bold md:text-2xl">
+        US Federal Tax Estimator —{" "}
+        <span class="text-indigo-600 dark:text-indigo-400">{TAX_YEAR}</span>
+      </h2>
+      <p class="text-xs text-slate-500 dark:text-slate-400">
+        Figures verified against IRS.gov on {LAST_VERIFIED}.
+      </p>
+    </div>
+
+    <form id="calc-form" class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+      <div class="space-y-5">
+        <div>
+          <label class="field-label" for="grossSE">
+            Gross self-employment income (annual)
+          </label>
+          <div class="relative">
+            <span class="absolute left-3 top-2.5 text-slate-500">$</span>
+            <input
+              class="field-input pl-7"
+              type="number"
+              id="grossSE"
+              min="0"
+              step="100"
+              value="80000"
+              inputmode="numeric"
+            />
+          </div>
+        </div>
+
+        <div>
+          <div class="mb-1.5 flex items-center justify-between">
+            <label class="field-label !mb-0" for="expenses">
+              Business expenses (annual)
+            </label>
+            <span
+              class="text-sm font-semibold text-indigo-600 dark:text-indigo-400"
+              id="expensesDisplay">$15,000</span
+            >
+          </div>
+          <input
+            class="w-full accent-indigo-600"
+            type="range"
+            id="expenses"
+            min="0"
+            max="100000"
+            step="500"
+            value="15000"
+          />
+          <details class="mt-2 text-xs text-slate-500 dark:text-slate-400">
+            <summary class="cursor-pointer underline-offset-2 hover:underline">
+              Use the mileage helper instead
+            </summary>
+            <div class="mt-2 flex items-center gap-2">
+              <input
+                class="field-input w-32"
+                type="number"
+                id="miles"
+                min="0"
+                step="10"
+                placeholder="Miles"
+                inputmode="numeric"
+              />
+              <span>business miles × IRS standard rate</span>
+            </div>
+          </details>
+        </div>
+
+        <div>
+          <label class="field-label" for="filingStatus">Filing status</label>
+          <select class="field-input" id="filingStatus">
+            <option value="single">Single</option>
+            <option value="marriedFilingJointly">Married filing jointly</option>
+            <option value="marriedFilingSeparately"
+              >Married filing separately</option
+            >
+            <option value="headOfHousehold">Head of household</option>
+          </select>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="field-label" for="w2Income">
+              W-2 income <span class="opacity-60">(optional)</span>
+            </label>
+            <div class="relative">
+              <span class="absolute left-3 top-2.5 text-slate-500">$</span>
+              <input
+                class="field-input pl-7"
+                type="number"
+                id="w2Income"
+                min="0"
+                step="100"
+                value="0"
+                inputmode="numeric"
+              />
+            </div>
+          </div>
+          <div>
+            <label class="field-label" for="w2Withheld">
+              Already withheld <span class="opacity-60">(optional)</span>
+            </label>
+            <div class="relative">
+              <span class="absolute left-3 top-2.5 text-slate-500">$</span>
+              <input
+                class="field-input pl-7"
+                type="number"
+                id="w2Withheld"
+                min="0"
+                step="100"
+                value="0"
+                inputmode="numeric"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label class="field-label" for="statePct">
+            State income tax (effective %) — optional
+          </label>
+          <input
+            class="field-input"
+            type="number"
+            id="statePct"
+            min="0"
+            max="15"
+            step="0.1"
+            value="0"
+            inputmode="decimal"
+          />
+          <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
+            Rough effective rate for your state. 0% for TX, FL, NV, etc.; ~5% mid-range; ~9%+ for CA/NY high earners.
+          </p>
+        </div>
+      </div>
+
+      <div class="space-y-3">
+        <div class="grid grid-cols-2 gap-3">
+          <div class="rounded-xl bg-slate-100 p-4 dark:bg-slate-800">
+            <p class="text-xs uppercase tracking-wider opacity-70">Net profit</p>
+            <p class="mt-1 text-2xl font-bold text-emerald-600 dark:text-emerald-400" id="outNetProfit">$0</p>
+          </div>
+          <div class="rounded-xl bg-slate-100 p-4 dark:bg-slate-800">
+            <p class="text-xs uppercase tracking-wider opacity-70">SE tax</p>
+            <p class="mt-1 text-2xl font-bold" id="outSeTax">$0</p>
+          </div>
+          <div class="rounded-xl bg-slate-100 p-4 dark:bg-slate-800">
+            <p class="text-xs uppercase tracking-wider opacity-70">Federal income tax</p>
+            <p class="mt-1 text-2xl font-bold" id="outIncomeTax">$0</p>
+          </div>
+          <div class="rounded-xl bg-slate-100 p-4 dark:bg-slate-800">
+            <p class="text-xs uppercase tracking-wider opacity-70">State tax (est.)</p>
+            <p class="mt-1 text-2xl font-bold" id="outStateTax">$0</p>
+          </div>
+        </div>
+
+        <div class="rounded-2xl bg-indigo-600 p-5 text-white shadow-md">
+          <div class="flex items-baseline justify-between">
+            <p class="text-xs uppercase tracking-wider opacity-80">Total set-aside</p>
+            <p class="text-xs opacity-80" id="outSetAsidePct">0% of profit</p>
+          </div>
+          <p class="mt-1 text-3xl font-black" id="outTotal">$0</p>
+          <div class="mt-3 grid grid-cols-2 gap-3 text-xs">
+            <div>
+              <p class="opacity-80">Per quarter</p>
+              <p class="mt-0.5 text-lg font-bold" id="outPerQuarter">$0</p>
+            </div>
+            <div>
+              <p class="opacity-80">Next payment due</p>
+              <p class="mt-0.5 text-lg font-bold" id="outNextDue">—</p>
+            </div>
+          </div>
+        </div>
+
+        <details class="rounded-xl border border-slate-200 p-4 text-sm dark:border-slate-800">
+          <summary class="cursor-pointer font-medium">Breakdown details</summary>
+          <dl class="mt-3 space-y-1.5 text-slate-600 dark:text-slate-400">
+            <div class="flex justify-between">
+              <dt>AGI (after ½ SE-tax deduction)</dt>
+              <dd id="dAgi">$0</dd>
+            </div>
+            <div class="flex justify-between">
+              <dt>Standard deduction</dt>
+              <dd id="dStd">$0</dd>
+            </div>
+            <div class="flex justify-between">
+              <dt>Taxable income</dt>
+              <dd id="dTaxable">$0</dd>
+            </div>
+            <div class="flex justify-between">
+              <dt>Additional Medicare (0.9%)</dt>
+              <dd id="dAddMedicare">$0</dd>
+            </div>
+            <div class="flex justify-between">
+              <dt>Less W-2 already withheld</dt>
+              <dd id="dWithheld">$0</dd>
+            </div>
+          </dl>
+        </details>
+      </div>
+    </form>
+
+    <p class="mt-6 text-xs text-slate-500 dark:text-slate-400">
+      Estimates only — informational, not tax advice. See the{" "}
+      <a href="/disclaimer" class="underline">full disclaimer</a> and consult a
+      qualified tax professional before filing or making payments.
+    </p>
+  </div>
+</section>
+
+<script>
+  import {
+    estimate,
+    mileageDeduction,
+    nextEstimatedDueDate,
+    type FilingStatus,
+  } from "@/data/tax-constants";
+
+  const $ = <T extends HTMLElement = HTMLElement>(id: string) =>
+    document.getElementById(id) as T;
+
+  const fmt = (n: number) =>
+    n.toLocaleString("en-US", {
+      style: "currency",
+      currency: "USD",
+      maximumFractionDigits: 0,
+    });
+
+  const grossSE = $<HTMLInputElement>("grossSE");
+  const expenses = $<HTMLInputElement>("expenses");
+  const expensesDisplay = $("expensesDisplay");
+  const miles = $<HTMLInputElement>("miles");
+  const filingStatus = $<HTMLSelectElement>("filingStatus");
+  const w2Income = $<HTMLInputElement>("w2Income");
+  const w2Withheld = $<HTMLInputElement>("w2Withheld");
+  const statePct = $<HTMLInputElement>("statePct");
+
+  function readNumber(el: HTMLInputElement | null, fallback = 0): number {
+    if (!el) return fallback;
+    const v = parseFloat(el.value);
+    return Number.isFinite(v) && v >= 0 ? v : fallback;
+  }
+
+  function recompute() {
+    const gross = readNumber(grossSE);
+    const expenseBase = readNumber(expenses);
+    const mileageExpense = mileageDeduction(readNumber(miles));
+    const businessExpenses = expenseBase + mileageExpense;
+    const fs = filingStatus.value as FilingStatus;
+    const w2 = readNumber(w2Income);
+    const withheld = readNumber(w2Withheld);
+    const stateRate = Math.min(15, readNumber(statePct)) / 100;
+
+    expensesDisplay.textContent = fmt(expenseBase);
+
+    const result = estimate({
+      grossSEIncome: gross,
+      businessExpenses,
+      filingStatus: fs,
+      w2Income: w2,
+      w2Withheld: withheld,
+    });
+
+    const stateTax = Math.max(0, result.taxableIncome) * stateRate;
+    const totalOwed = result.owedAfterWithholding + stateTax;
+    const setAsidePct =
+      result.netProfit > 0 ? (totalOwed / result.netProfit) * 100 : 0;
+    const perQuarter = totalOwed / 4;
+
+    $("outNetProfit").textContent = fmt(result.netProfit);
+    $("outSeTax").textContent = fmt(result.seTax);
+    $("outIncomeTax").textContent = fmt(result.federalIncomeTax);
+    $("outStateTax").textContent = fmt(stateTax);
+    $("outTotal").textContent = fmt(totalOwed);
+    $("outSetAsidePct").textContent =
+      result.netProfit > 0
+        ? `${setAsidePct.toFixed(1)}% of profit`
+        : "—";
+    $("outPerQuarter").textContent = fmt(perQuarter);
+
+    const next = nextEstimatedDueDate();
+    $("outNextDue").textContent = next
+      ? new Date(next.due).toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+        })
+      : "—";
+
+    $("dAgi").textContent = fmt(result.agi);
+    $("dStd").textContent = fmt(result.standardDeduction);
+    $("dTaxable").textContent = fmt(result.taxableIncome);
+    $("dAddMedicare").textContent = fmt(result.additionalMedicare);
+    $("dWithheld").textContent = fmt(withheld);
+  }
+
+  const form = document.getElementById("calc-form");
+  form?.addEventListener("input", recompute);
+  recompute();
+</script>
