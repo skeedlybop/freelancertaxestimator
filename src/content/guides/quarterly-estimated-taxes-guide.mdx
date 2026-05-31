@@ -1,0 +1,200 @@
+---
+title: "Quarterly Estimated Taxes — A 2026 Guide for the Self-Employed"
+description: "What quarterly estimated taxes are, who must pay them, the 2026 IRS due dates, how to calculate and pay each one, and the safe-harbor rule that stops penalties."
+primaryKeyword: "quarterly estimated taxes self employed"
+secondaryKeywords:
+  - "1040-ES 2026"
+  - "estimated tax due dates 2026"
+  - "self employed quarterly tax payments"
+  - "safe harbor estimated tax"
+category: "deadlines"
+author: "Jason — freelancertaxestimator"
+datePublished: "2026-05-31"
+dateModified: "2026-05-31"
+lastVerified: "2026-05-31"
+relatedSlugs:
+  - "/how-much-to-set-aside-for-taxes-freelancer"
+schema: "Article"
+---
+
+import {
+  ESTIMATED_TAX_DUE_DATES_2026,
+  SAFE_HARBOR,
+  SOURCES,
+  TAX_YEAR,
+} from "@/data/tax-constants";
+import CalculatorCTA from "@/components/CalculatorCTA.astro";
+import FAQ from "@/components/FAQ.astro";
+import Disclaimer from "@/components/Disclaimer.astro";
+
+# Quarterly Estimated Taxes — A {TAX_YEAR} Guide for the Self-Employed
+
+**Short version:** if you expect to owe at least $1,000 in federal tax after withholding, the IRS expects you to pre-pay it in four chunks during the year. For tax year {TAX_YEAR}, the four due dates are **{ESTIMATED_TAX_DUE_DATES_2026[0].due.slice(5)}**, **{ESTIMATED_TAX_DUE_DATES_2026[1].due.slice(5)}**, **{ESTIMATED_TAX_DUE_DATES_2026[2].due.slice(5)}**, and **{ESTIMATED_TAX_DUE_DATES_2026[3].due.slice(5)}** (the last one falls in 2027). Miss them and the IRS can charge an underpayment penalty even if you pay your full bill by April.
+
+## What "estimated taxes" actually are
+
+The US tax system is "pay-as-you-go." For employees that happens invisibly — every paycheck has federal tax withheld and sent to the IRS in real time. Self-employed people have no employer withholding, so the IRS asks them to make the equivalent payments themselves, four times a year, using **Form 1040-ES**.
+
+Estimated payments cover everything you owe federally on self-employment income:
+
+- **Self-employment (SE) tax** — Social Security and Medicare on net earnings, which would have been split with your employer if you had one.
+- **Federal income tax** — your normal income tax across the brackets, on top of SE tax.
+- **Additional Medicare tax** — 0.9% above the filing-status threshold, if you earn that much.
+
+If you also have W-2 income or another source with withholding, that withholding counts toward what you owe — you only need to estimate the gap.
+
+## Who has to pay quarterly
+
+Per the IRS, you generally must make estimated payments if **both** of these are true for {TAX_YEAR}:
+
+1. You expect to owe at least **$1,000** in federal tax after subtracting any withholding and refundable credits, and
+2. You expect your withholding and refundable credits to be less than the smaller of:
+   - **{(SAFE_HARBOR.currentYearPct * 100).toFixed(0)}%** of the tax shown on your {TAX_YEAR} return, or
+   - **{(SAFE_HARBOR.priorYearPct * 100).toFixed(0)}%** of the tax shown on your {TAX_YEAR - 1} return (or **{(SAFE_HARBOR.priorYearPctHighIncome * 100).toFixed(0)}%** if your {TAX_YEAR - 1} AGI was over ${SAFE_HARBOR.highIncomeAGIThreshold.toLocaleString()}).
+
+That second condition is the "safe harbor" — it's how you avoid the penalty even if your actual final tax turns out higher than what you paid in. More on that below.
+
+A quick rule of thumb: if you're freelancing full-time and expect any meaningful profit, assume yes, you owe quarterly. If you have a side hustle on top of a W-2 job, run the numbers — sometimes bumping W-2 withholding is enough to cover it.
+
+## The {TAX_YEAR} estimated tax due dates
+
+The IRS divides the year into four uneven "payment periods." Each period has its own deadline, falling about two weeks after the period ends:
+
+<div class="overflow-x-auto my-6">
+  <table class="w-full text-left text-sm">
+    <thead>
+      <tr class="border-b border-slate-300 dark:border-slate-700">
+        <th class="py-2 pr-4">Quarter</th>
+        <th class="py-2 pr-4">Income earned</th>
+        <th class="py-2">Payment due</th>
+      </tr>
+    </thead>
+    <tbody>
+      {ESTIMATED_TAX_DUE_DATES_2026.map((d) => (
+        <tr class="border-b border-slate-200 dark:border-slate-800">
+          <td class="py-2 pr-4 font-semibold">{d.quarter}</td>
+          <td class="py-2 pr-4">{d.periodCovered}</td>
+          <td class="py-2">
+            {new Date(d.due).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
+A few subtleties that catch first-year freelancers:
+
+- **The quarters are not three months each.** Q1 covers Jan–Mar (three months), Q2 covers Apr–May (two months), Q3 covers Jun–Aug (three months), Q4 covers Sep–Dec (four months). Despite the uneven periods, most people just pay 1/4 of their annual estimate each time — that's fine.
+- **Q4 is due in January of the following year.** For tax year {TAX_YEAR}, Q4 is due **{new Date(ESTIMATED_TAX_DUE_DATES_2026[3].due).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}**.
+- **Weekend and holiday shifts.** If a due date falls on a Saturday, Sunday, or federal holiday, it moves to the next business day.
+
+## How to calculate each payment
+
+There are two reasonable approaches, depending on how predictable your income is.
+
+### Method 1 — Annualize and divide by four
+
+Best if your income is roughly steady month to month. The recipe:
+
+1. Estimate your {TAX_YEAR} net profit (gross self-employment income minus business expenses).
+2. Add any other expected income (W-2 wages, interest, etc.).
+3. Subtract above-the-line deductions, including half your SE tax.
+4. Subtract your standard deduction.
+5. Look up federal income tax on the remaining taxable income using the {TAX_YEAR} brackets.
+6. Add SE tax (15.3% × 92.35% of net profit, capped on the Social Security portion).
+7. Subtract any W-2 federal withholding you'll have.
+8. Divide what's left by 4.
+
+That's what the [tax estimator on the home page](/) does for you — fill in your numbers and it gives you a per-quarter amount directly.
+
+### Method 2 — Pay the safe-harbor minimum from last year
+
+If your income jumps around — agency contracts, lumpy retainer renewals, a big launch — predicting {TAX_YEAR} is hard. There's an easier path: pay quarterly amounts that cover **{(SAFE_HARBOR.priorYearPct * 100).toFixed(0)}%** of your {TAX_YEAR - 1} total tax (or **{(SAFE_HARBOR.priorYearPctHighIncome * 100).toFixed(0)}%** if your {TAX_YEAR - 1} AGI was over ${SAFE_HARBOR.highIncomeAGIThreshold.toLocaleString()}).
+
+Look up your {TAX_YEAR - 1} total federal tax on Form 1040 line 24. Divide by 4. Pay that each quarter. Even if {TAX_YEAR} ends up much bigger, you have **safe harbor**: no underpayment penalty. You'll still owe the difference at filing time — but no penalty for not having pre-paid it.
+
+This is the standard advice for freelancers with growing or volatile income: pay safe-harbor minimums quarterly, save the rest aggressively in a tax savings account, and settle up in April.
+
+## How to actually pay
+
+You have three good options. All of them route to the same place; pick one and stick with it.
+
+### IRS Direct Pay (recommended for most)
+
+Free, no signup, pays directly from your bank account. Go to **[irs.gov/payments/direct-pay](https://www.irs.gov/payments/direct-pay)**, choose "Estimated Tax (1040-ES)," select the tax year ({TAX_YEAR}), and enter the amount. You'll get a confirmation number — save it.
+
+Direct Pay is the right choice for almost everyone. It's the fastest, has no fees, and confirms in your inbox in seconds.
+
+### EFTPS (Electronic Federal Tax Payment System)
+
+Free, government-run, slightly more setup. You enroll at **[eftps.gov](https://www.eftps.gov)** and get a PIN by mail (yes, by mail — allow 5–7 business days). After that, you can schedule payments up to 365 days in advance and look at year-to-date payment history in one place.
+
+EFTPS is the right choice if you want to schedule all four quarterly payments at the start of the year, or if you're managing multiple entities. The mail-delivered PIN means **don't wait until April 14 to enroll**.
+
+### Paying by check with Form 1040-ES
+
+Old-school but still allowed. Print the voucher from [IRS Form 1040-ES](https://www.irs.gov/forms-pubs/about-form-1040-es), make your check payable to "United States Treasury," and mail it to the address listed for your state. The IRS counts the payment as on-time based on the postmark date, not when they open the envelope.
+
+Only use this if you genuinely prefer paper. The other two options are faster and give you a confirmation record automatically.
+
+## The safe-harbor rule, in plain English
+
+The underpayment penalty applies if you owed more than $1,000 at filing time AND you didn't pre-pay enough during the year. "Enough" is whichever of these is smaller:
+
+- **{(SAFE_HARBOR.currentYearPct * 100).toFixed(0)}% of your actual {TAX_YEAR} tax** — risky to estimate in advance, easy to get wrong, but you only ever owe the truth at the end.
+- **{(SAFE_HARBOR.priorYearPct * 100).toFixed(0)}% of your {TAX_YEAR - 1} tax** (or **{(SAFE_HARBOR.priorYearPctHighIncome * 100).toFixed(0)}%** if {TAX_YEAR - 1} AGI > ${SAFE_HARBOR.highIncomeAGIThreshold.toLocaleString()}) — fixed, knowable from your prior return, easy to hit.
+
+Hit either bar and the penalty is $0. Most freelancers should target the prior-year safe harbor as their floor: it's a known number, the IRS already accepts it, and it doesn't punish you for a strong income year.
+
+The penalty itself is computed quarter-by-quarter using a published interest rate, so even when it applies it's usually modest — not a catastrophe, just an irritating extra. But the easy way to avoid it entirely is to send the prior-year safe-harbor amount each quarter on time.
+
+<CalculatorCTA>
+  Want your exact per-quarter payment for {TAX_YEAR}? Run your numbers and the
+  calculator returns the dollar amount and your next due date.
+</CalculatorCTA>
+
+## Common mistakes
+
+- **Saving instead of paying.** Stashing the money in a tax savings account is great — but if you don't actually send it to the IRS by the quarterly deadlines, you can still get a penalty.
+- **Forgetting Q4 is in January.** It's easy to think "December → end of year → I'll handle it with my return in April." Q4 is due **{new Date(ESTIMATED_TAX_DUE_DATES_2026[3].due).toLocaleDateString("en-US", { month: "long", day: "numeric" })}, {new Date(ESTIMATED_TAX_DUE_DATES_2026[3].due).getFullYear()}** — three months before your filing deadline.
+- **Paying for the wrong tax year.** When you make a payment in January {new Date(ESTIMATED_TAX_DUE_DATES_2026[3].due).getFullYear()}, Direct Pay will ask which year it applies to. The Q4 payment is for tax year **{TAX_YEAR}**, not {TAX_YEAR + 1}.
+- **Ignoring state estimated taxes.** Most states with income tax want their own quarterly payments, often on a different schedule. This guide covers federal only.
+
+<FAQ
+  items={[
+    {
+      q: "What happens if I miss a quarterly estimated tax payment?",
+      a: "The IRS can charge an underpayment penalty computed quarter-by-quarter at the federal short-term rate plus 3%. You can avoid the penalty entirely by hitting one of the safe-harbor thresholds — typically by pre-paying 100% (or 110% for higher earners) of your prior-year tax across the four quarters.",
+    },
+    {
+      q: "Do I have to pay if my net profit was under $400?",
+      a: "Self-employment tax doesn't apply below $400 of net earnings. But federal income tax can still apply on combined income, and if you'll owe $1,000 or more in total federal tax after withholding, quarterly estimated payments are still expected.",
+    },
+    {
+      q: `Can I just pay one big estimated payment for ${TAX_YEAR} instead of four?`,
+      a: `You can pay more than the minimum in any given quarter, and you can even pre-pay the whole year by the Q1 deadline (${new Date(ESTIMATED_TAX_DUE_DATES_2026[0].due).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}). What you can't do is skip the early quarters and dump everything in Q4 — the penalty is computed per quarter, so under-paying Q1–Q3 can trigger it even if you cover the full annual amount eventually.`,
+    },
+    {
+      q: "I have a W-2 job and a side hustle — do I still need 1040-ES?",
+      a: "Not necessarily. If your W-2 withholding alone is large enough to cover total expected tax (or hit the prior-year safe harbor), you don't need to file separate estimated payments. You can also ask your employer to bump withholding via a new W-4 — money withheld from a W-2 counts as paid evenly across the year, which is sometimes simpler than four 1040-ES payments.",
+    },
+    {
+      q: "Where do I send the actual money?",
+      a: `IRS Direct Pay at irs.gov/payments/direct-pay is the simplest path — free, no enrollment, instant confirmation. EFTPS works too but requires a mailed PIN to enroll. Paying by check with the 1040-ES voucher is allowed but slow.`,
+    },
+  ]}
+/>
+
+## Sources
+
+- IRS — <a href={SOURCES.estimatedTax}>Estimated Tax (general overview)</a>
+- IRS — <a href="https://www.irs.gov/forms-pubs/about-form-1040-es" rel="noopener" target="_blank">About Form 1040-ES</a>
+- IRS — <a href={SOURCES.seTax}>Self-Employment Tax</a>
+- IRS — <a href="https://www.irs.gov/payments/direct-pay" rel="noopener" target="_blank">Direct Pay</a>
+
+<Disclaimer />
