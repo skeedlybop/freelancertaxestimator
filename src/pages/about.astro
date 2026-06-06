@@ -1,16 +1,31 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { LAST_VERIFIED } from "@/data/tax-constants";
+import {
+  AUTHOR_NAME,
+  AUTHOR_TITLE,
+  AUTHOR_LONG_BIO,
+  CONTACT_EMAIL,
+  EDITORIAL_LAST_REVIEWED,
+} from "@/data/site-meta";
 ---
 
 <BaseLayout
-  title="About — Freelancer Tax Estimator"
-  description="About FreelancerTaxEstimator: who runs it, how the calculator works, our sourcing standards, and the limits of what an estimator can do."
+  title={`About ${AUTHOR_NAME} — Freelancer Tax Estimator`}
+  description={`About ${AUTHOR_NAME}, editor of FreelancerTaxEstimator: who he is, why he built the site, how figures stay accurate, and the limits of what an estimator can do.`}
 >
   <article class="prose-content px-4 py-10">
     <h1>About</h1>
     <p class="text-sm text-slate-500 dark:text-slate-400">
-      Last reviewed {LAST_VERIFIED}.
+      Editorial review: {EDITORIAL_LAST_REVIEWED} · Tax figures verified {LAST_VERIFIED}
+    </p>
+
+    <h2>Who runs this site</h2>
+    {AUTHOR_LONG_BIO.map((para) => <p>{para}</p>)}
+
+    <p>
+      Email: <a href={`mailto:${CONTACT_EMAIL}`}><strong>{CONTACT_EMAIL}</strong></a>.
+      It comes to a real inbox; bug reports get a reply.
     </p>
 
     <h2>What this site is</h2>
@@ -19,24 +34,14 @@ import { LAST_VERIFIED } from "@/data/tax-constants";
       freelancers and self-employed workers. The core utility is a federal tax
       estimator that walks the same calculation the IRS uses — self-employment
       tax, the ½-SE deduction, federal income tax across the current brackets,
-      and the Additional Medicare tax — and tells you a concrete <em>set-aside
+      and the Additional Medicare tax — and gives you a concrete <em>set-aside
       percentage</em> and <em>per-quarter payment</em>.
     </p>
     <p>
       The site has a deliberately narrow scope: <strong>US federal tax for
-      self-employed individuals</strong>. We do not cover business returns
+      self-employed individuals</strong>. We don't cover business returns
       (1120/1120-S/1065), C-corp planning, or non-US tax systems. That focus is
       how the figures and guides stay accurate enough to be useful.
-    </p>
-
-    <h2>Who runs it</h2>
-    <p>
-      The site is independently operated and edited by Jason. The guides and
-      calculator are written and maintained by one person who reads the
-      underlying IRS publications and Revenue Procedures, rather than by a
-      content farm rewriting other people's blog posts. If something on the
-      site is wrong or out of date, that's on me — please{" "}
-      <a href="/contact">tell me</a> and I will fix it.
     </p>
 
     <h2>How figures stay accurate</h2>
@@ -45,12 +50,13 @@ import { LAST_VERIFIED } from "@/data/tax-constants";
       source-of-truth file (<code>tax-constants.ts</code>) that is verified
       against IRS.gov. The whole site reads from that file — when a figure
       changes, it updates everywhere at once. The current values were verified
-      on <strong>{LAST_VERIFIED}</strong>. Primary sources used:
+      on <strong>{LAST_VERIFIED}</strong>.
     </p>
+    <p>Primary sources:</p>
     <ul>
       <li>
-        IRS Rev. Proc. 2025-32 (2026 inflation adjustments, including the
-        post-OBBBA bracket and standard-deduction changes)
+        IRS Rev. Proc. 2025-32 — 2026 inflation adjustments, including the
+        post-OBBBA bracket and standard-deduction changes
       </li>
       <li>IRS — Self-Employment Tax (Social Security and Medicare)</li>
       <li>IRS — Estimated Tax (Form 1040-ES and quarterly due dates)</li>
@@ -60,25 +66,56 @@ import { LAST_VERIFIED } from "@/data/tax-constants";
     </ul>
     <p>
       Every content page that cites a number links the source. If you find a
-      number on this site without a source link, that's a bug — please report
-      it.
+      number on this site without a source link, that's a bug — email me and I
+      will fix it.
     </p>
 
-    <h2>What we don't do</h2>
+    <h2>Editorial process</h2>
     <ul>
       <li>
-        <strong>We don't give advice.</strong> The calculator and articles are
+        <strong>Drafted by one author.</strong> All guides on this site are
+        written under one byline ({AUTHOR_NAME}). There is no anonymous
+        contributor pool and no AI-generated boilerplate.
+      </li>
+      <li>
+        <strong>Sourced to IRS.gov first.</strong> Secondary commentary
+        (Tax Foundation, NATP, AICPA) may be referenced for context but every
+        figure traces back to the IRS publication that issued it.
+      </li>
+      <li>
+        <strong>Verified annually.</strong> When the IRS publishes the next
+        Revenue Procedure (typically late autumn), the constants file gets
+        re-verified and the <em>last verified</em> date on each page is bumped.
+        Mid-year IRS updates (e.g. mileage rate changes) trigger an immediate
+        review.
+      </li>
+      <li>
+        <strong>Corrections welcome and prompt.</strong> Reader-flagged errors
+        are corrected within 72 hours; the page's <em>date modified</em>
+        reflects the fix.
+      </li>
+    </ul>
+
+    <h2>What this site is not</h2>
+    <ul>
+      <li>
+        <strong>Not tax advice.</strong> The calculator and articles are
         educational; they don't know your specific situation. For filing
-        decisions, hire a CPA or Enrolled Agent.
+        decisions, hire a CPA or Enrolled Agent. The IRS{" "}
+        <a
+          href="https://irs.treasury.gov/rpo/rpo.jsf"
+          rel="noopener nofollow"
+          target="_blank">preparer directory</a
+        > is a starting point.
       </li>
       <li>
-        <strong>We don't store your inputs.</strong> The calculator runs
-        entirely in your browser. Nothing you type is sent to a server.
+        <strong>Not a data collector.</strong> The calculator runs entirely in
+        your browser. Income, expenses, and filing status never leave the page.
       </li>
       <li>
-        <strong>We don't sell affiliate "best tax software" listicles.</strong>{" "}
-        The site is monetized by Google AdSense; we don't take payment to
-        recommend products.
+        <strong>Not a software listicle farm.</strong> The site is monetized by
+        Google AdSense; no affiliate links, no sponsored "best tax software"
+        recommendations.
       </li>
     </ul>
 
@@ -91,8 +128,7 @@ import { LAST_VERIFIED } from "@/data/tax-constants";
       </li>
       <li>
         It doesn't compute the QBI deduction (§199A) — that one is
-        situation-specific and we'd rather not return a wrong number than a
-        rough one.
+        situation-specific and a rough QBI number is worse than no number.
       </li>
       <li>
         State tax is a single user-entered effective rate, not a state-by-state
@@ -107,8 +143,14 @@ import { LAST_VERIFIED } from "@/data/tax-constants";
 
     <h2>Contact</h2>
     <p>
-      Found a bug, a number that needs updating, or a topic we should cover?
-      The <a href="/contact">contact page</a> has details.
+      Email <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a> for bug
+      reports, out-of-date figures, topic requests, or corrections. The{" "}
+      <a href="/contact">contact page</a> has more on what to send and what I
+      can and can't reply to.
+    </p>
+
+    <p class="mt-8 text-sm text-slate-500 dark:text-slate-400">
+      — {AUTHOR_NAME}, {AUTHOR_TITLE}
     </p>
   </article>
 </BaseLayout>
