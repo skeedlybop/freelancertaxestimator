@@ -28,6 +28,7 @@ import {
 import CalculatorCTA from "@/components/CalculatorCTA.astro";
 import FAQ from "@/components/FAQ.astro";
 import Disclaimer from "@/components/Disclaimer.astro";
+import SetAsideBar from "@/components/charts/SetAsideBar.astro";
 
 export const example = estimate({
   grossSEIncome: 60000,
@@ -38,6 +39,8 @@ export const example = estimate({
 # How Much to Set Aside for Taxes as a Freelancer
 
 **The short answer:** most freelancers should set aside **25–35% of every dollar of profit** for taxes. If you want one number to start with, **30%** is a safe default for a typical full-time freelancer — then adjust up or down once you run your real figures. Two things make up that bill: self-employment tax (a flat {(SE_TAX.totalRate * 100).toFixed(1)}% in {TAX_YEAR}) and federal income tax (which depends on your bracket), plus state income tax if your state has one.
+
+<SetAsideBar />
 
 ## Why there's no single percentage
 

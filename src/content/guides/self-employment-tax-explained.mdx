@@ -29,10 +29,13 @@ import {
 import CalculatorCTA from "@/components/CalculatorCTA.astro";
 import FAQ from "@/components/FAQ.astro";
 import Disclaimer from "@/components/Disclaimer.astro";
+import FicaPie from "@/components/charts/FicaPie.astro";
 
 # Self-Employment Tax Explained ({TAX_YEAR})
 
 **Self-employment (SE) tax is the Social Security and Medicare tax that self-employed people pay on their net profit.** It is *separate from and on top of* federal income tax. For {TAX_YEAR} the combined rate is **{(SE_TAX.totalRate * 100).toFixed(1)}%** — **{(SE_TAX.socialSecurityRate * 100).toFixed(1)}%** for Social Security (applied to net earnings up to a wage base of **${SE_TAX.socialSecurityWageBase.toLocaleString()}**) and **{(SE_TAX.medicareRate * 100).toFixed(1)}%** for Medicare (no cap, applied to all of it). It's the single biggest reason 1099 income takes home less than the same gross at a W-2 job.
+
+<FicaPie />
 
 ## Why does this tax exist?
 

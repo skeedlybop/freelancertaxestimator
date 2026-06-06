@@ -1,0 +1,115 @@
+---
+/**
+ * TakeHomeCompare — side-by-side bar comparison of take-home pay on
+ * $80,000 of gross income earned as W-2 vs as 1099 self-employment.
+ * Demonstrates why the "1099 rate feels higher" intuition is correct.
+ */
+import {
+  estimate,
+  SE_TAX,
+  calcFederalIncomeTax,
+  STANDARD_DEDUCTION_2026,
+  TAX_YEAR,
+} from "@/data/tax-constants";
+
+const gross = 80000;
+const filingStatus = "single";
+
+// W-2 scenario: same gross, only the employee half of FICA (7.65%) hits.
+const w2Fica = gross * 0.0765;
+const w2Taxable = Math.max(0, gross - STANDARD_DEDUCTION_2026[filingStatus]);
+const w2Income = calcFederalIncomeTax(w2Taxable, filingStatus);
+const w2TotalTax = w2Fica + w2Income;
+const w2Take = gross - w2TotalTax;
+
+// 1099 scenario: zero business expenses for clean comparison.
+const seRes = estimate({
+  grossSEIncome: gross,
+  businessExpenses: 0,
+  filingStatus,
+});
+const seTotalTax = seRes.totalTax;
+const seTake = gross - seTotalTax;
+
+const maxBar = Math.max(w2Take, seTake, w2TotalTax, seTotalTax);
+
+function pct(n: number) {
+  return Math.max(2, (n / maxBar) * 100);
+}
+---
+
+<figure class="my-8 mx-auto max-w-2xl">
+  <div class="card p-5 md:p-6">
+    <p class="mb-1 text-sm font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+      ${gross.toLocaleString()} gross — W-2 vs 1099
+    </p>
+    <p class="mb-5 text-xs text-slate-500 dark:text-slate-400">
+      Single filer, {TAX_YEAR} federal only, no business expenses on the 1099 side.
+    </p>
+
+    <div role="img" aria-label="Bar chart comparing take-home pay on $80,000 gross as W-2 versus 1099">
+      <div class="mb-5">
+        <div class="mb-1 flex items-baseline justify-between text-sm">
+          <span class="font-semibold">W-2 employee</span>
+          <span class="text-slate-500 dark:text-slate-400">
+            Take home <strong class="text-emerald-600 dark:text-emerald-400">${Math.round(w2Take).toLocaleString()}</strong>
+          </span>
+        </div>
+        <div class="flex h-8 w-full overflow-hidden rounded-md bg-slate-100 dark:bg-slate-800">
+          <div
+            class="bg-emerald-500"
+            style={`width: ${pct(w2Take)}%`}
+            title={`Take home $${Math.round(w2Take).toLocaleString()}`}
+          ></div>
+          <div
+            class="bg-red-400"
+            style={`width: ${pct(w2TotalTax)}%`}
+            title={`Federal tax $${Math.round(w2TotalTax).toLocaleString()}`}
+          ></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="mb-1 flex items-baseline justify-between text-sm">
+          <span class="font-semibold">1099 freelancer</span>
+          <span class="text-slate-500 dark:text-slate-400">
+            Take home <strong class="text-emerald-600 dark:text-emerald-400">${Math.round(seTake).toLocaleString()}</strong>
+          </span>
+        </div>
+        <div class="flex h-8 w-full overflow-hidden rounded-md bg-slate-100 dark:bg-slate-800">
+          <div
+            class="bg-emerald-500"
+            style={`width: ${pct(seTake)}%`}
+            title={`Take home $${Math.round(seTake).toLocaleString()}`}
+          ></div>
+          <div
+            class="bg-red-400"
+            style={`width: ${pct(seTotalTax)}%`}
+            title={`Federal tax $${Math.round(seTotalTax).toLocaleString()}`}
+          ></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-4 grid grid-cols-2 gap-3 text-xs">
+      <div class="flex items-center gap-2">
+        <span class="inline-block h-3 w-3 rounded-sm bg-emerald-500"></span>
+        <span>Take-home (post-tax)</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="inline-block h-3 w-3 rounded-sm bg-red-400"></span>
+        <span>Federal tax owed</span>
+      </div>
+    </div>
+
+    <p class="mt-4 text-sm text-slate-700 dark:text-slate-300">
+      The 1099 freelancer takes home about{" "}
+      <strong>${Math.round(w2Take - seTake).toLocaleString()} less</strong> on
+      the same ${gross.toLocaleString()} gross — almost entirely the employer half
+      of FICA they now have to cover themselves ({(SE_TAX.totalRate * 100).toFixed(1)}% combined SE tax).
+    </p>
+  </div>
+  <figcaption class="mt-2 text-center text-xs text-slate-500 dark:text-slate-400">
+    Why 1099 income at the same gross feels like a pay cut — and what to negotiate for.
+  </figcaption>
+</figure>

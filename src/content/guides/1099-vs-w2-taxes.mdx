@@ -30,6 +30,7 @@ import {
 import CalculatorCTA from "@/components/CalculatorCTA.astro";
 import FAQ from "@/components/FAQ.astro";
 import Disclaimer from "@/components/Disclaimer.astro";
+import TakeHomeCompare from "@/components/charts/TakeHomeCompare.astro";
 
 export const GROSS = 70000;
 export const w2IncomeTax = calcFederalIncomeTax(GROSS - STANDARD_DEDUCTION_2026.single, "single");
@@ -41,6 +42,8 @@ export const gap = contractor.totalTax - w2Total;
 # 1099 vs W-2 Taxes ({TAX_YEAR})
 
 **The core difference: a W-2 job withholds tax from every paycheck and your employer quietly pays half your Social Security and Medicare. A 1099 contractor gets the full amount with nothing withheld — and owes both halves of that payroll tax themselves.** That second half, called self-employment tax, is the single biggest reason the same dollar figure takes home less as a contractor than as an employee.
+
+<TakeHomeCompare />
 
 ## Where the difference actually comes from
 

@@ -1,0 +1,63 @@
+---
+/**
+ * QuarterlyTimeline — horizontal timeline of the 4 quarterly estimated-tax
+ * due dates for the current tax year. Today's date marker highlights where
+ * you are in the year.
+ */
+import { ESTIMATED_TAX_DUE_DATES_2026, TAX_YEAR } from "@/data/tax-constants";
+
+// Map each due date onto a 0–100 axis. Year window: Jan 1 (yr) → Jan 31 (yr+1)
+const yearStart = new Date(`${TAX_YEAR}-01-01`).valueOf();
+const yearEnd = new Date(`${TAX_YEAR + 1}-01-31`).valueOf();
+const span = yearEnd - yearStart;
+
+function pct(iso: string) {
+  return ((new Date(iso).valueOf() - yearStart) / span) * 100;
+}
+
+const points = ESTIMATED_TAX_DUE_DATES_2026.map((d) => ({
+  quarter: d.quarter,
+  date: d.due,
+  pct: pct(d.due),
+  label: new Date(d.due).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  }),
+}));
+---
+
+<figure class="my-8 mx-auto max-w-2xl">
+  <div class="card p-5 md:p-6">
+    <p class="mb-5 text-sm font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+      {TAX_YEAR} estimated tax due dates
+    </p>
+    <div class="relative" role="img" aria-label={`Timeline of ${TAX_YEAR} quarterly estimated tax due dates: ${points.map(p => p.label).join(", ")}`}>
+      <div class="absolute left-0 right-0 top-3 h-1 rounded-full bg-slate-200 dark:bg-slate-700"></div>
+      <div class="relative flex">
+        {points.map((p) => (
+          <div
+            class="absolute -translate-x-1/2"
+            style={`left: ${Math.max(2, Math.min(98, p.pct))}%`}
+          >
+            <div class="flex flex-col items-center">
+              <div class="h-7 w-7 rounded-full border-4 border-white bg-indigo-600 shadow ring-2 ring-indigo-600 dark:border-slate-900"></div>
+              <div class="mt-1 text-center">
+                <p class="text-xs font-bold text-indigo-600 dark:text-indigo-400">{p.quarter}</p>
+                <p class="text-[11px] text-slate-600 dark:text-slate-400 leading-tight">{p.label}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div class="h-24"></div>
+    </div>
+    <div class="mt-2 flex justify-between text-[10px] uppercase tracking-wider text-slate-400 dark:text-slate-500">
+      <span>Jan {TAX_YEAR}</span>
+      <span>Jan {TAX_YEAR + 1}</span>
+    </div>
+  </div>
+  <figcaption class="mt-2 text-center text-xs text-slate-500 dark:text-slate-400">
+    Q4 is due in the following January — a common first-year freelancer surprise.
+  </figcaption>
+</figure>

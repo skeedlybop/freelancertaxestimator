@@ -26,6 +26,7 @@ import {
 import CalculatorCTA from "@/components/CalculatorCTA.astro";
 import FAQ from "@/components/FAQ.astro";
 import Disclaimer from "@/components/Disclaimer.astro";
+import QuarterlyTimeline from "@/components/charts/QuarterlyTimeline.astro";
 
 # Quarterly Estimated Taxes — A {TAX_YEAR} Guide for the Self-Employed
 
@@ -57,6 +58,8 @@ That second condition is the "safe harbor" — it's how you avoid the penalty ev
 A quick rule of thumb: if you're freelancing full-time and expect any meaningful profit, assume yes, you owe quarterly. If you have a side hustle on top of a W-2 job, run the numbers — sometimes bumping W-2 withholding is enough to cover it.
 
 ## The {TAX_YEAR} estimated tax due dates
+
+<QuarterlyTimeline />
 
 The IRS divides the year into four uneven "payment periods." Each period has its own deadline, falling about two weeks after the period ends:
 

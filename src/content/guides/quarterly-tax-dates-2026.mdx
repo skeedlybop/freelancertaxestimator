@@ -23,10 +23,13 @@ import { ESTIMATED_TAX_DUE_DATES_2026, TAX_YEAR, SOURCES } from "@/data/tax-cons
 import CalculatorCTA from "@/components/CalculatorCTA.astro";
 import FAQ from "@/components/FAQ.astro";
 import Disclaimer from "@/components/Disclaimer.astro";
+import QuarterlyTimeline from "@/components/charts/QuarterlyTimeline.astro";
 
 # {TAX_YEAR} Quarterly Estimated Tax Due Dates
 
 **The four {TAX_YEAR} federal estimated tax deadlines are {new Date(ESTIMATED_TAX_DUE_DATES_2026[0].due).toLocaleDateString("en-US", { month: "long", day: "numeric" })}, {new Date(ESTIMATED_TAX_DUE_DATES_2026[1].due).toLocaleDateString("en-US", { month: "long", day: "numeric" })}, {new Date(ESTIMATED_TAX_DUE_DATES_2026[2].due).toLocaleDateString("en-US", { month: "long", day: "numeric" })}, and {new Date(ESTIMATED_TAX_DUE_DATES_2026[3].due).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}.** Note that the final payment for tax year {TAX_YEAR} lands in January {TAX_YEAR + 1}. This is the quick-reference version — for the full how and why, see the [complete quarterly taxes guide](/quarterly-estimated-taxes-guide).
+
+<QuarterlyTimeline />
 
 ## The {TAX_YEAR} schedule at a glance
 
