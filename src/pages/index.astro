@@ -3,6 +3,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import Calculator from "@/components/Calculator.astro";
 import { getCollection } from "astro:content";
 import { TAX_YEAR, LAST_VERIFIED } from "@/data/tax-constants";
+import { AUTHOR_NAME, EDITORIAL_LAST_REVIEWED } from "@/data/site-meta";
 
 const guides = (await getCollection("guides")).sort(
   (a, b) =>
@@ -20,6 +21,7 @@ const appLd = {
   applicationCategory: "FinanceApplication",
   operatingSystem: "Web",
   offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  author: { "@type": "Person", name: AUTHOR_NAME },
 };
 ---
 
@@ -45,11 +47,61 @@ const appLd = {
 
   <Calculator />
 
+  <section class="mx-auto max-w-3xl px-4 pt-6 pb-2">
+    <div class="card p-6 md:p-8">
+      <p
+        class="mb-2 text-xs uppercase tracking-wider text-indigo-600 dark:text-indigo-400"
+      >
+        Why this calculator is different
+      </p>
+      <h2 class="mb-4 text-2xl font-bold md:text-3xl">
+        Built from the IRS publications, not from a guess at a flat rate
+      </h2>
+      <p class="mb-3 text-slate-700 dark:text-slate-300">
+        Most freelancer tax tools you'll find online apply a single flat
+        percentage (typically 25% or 30%) to your gross income, divide by four,
+        and call the result your "quarterly payment." That's fine for an
+        envelope on the fridge. It is not how your actual {TAX_YEAR} federal
+        return is computed, and the gap between the guess and the truth is what
+        produces five-figure April surprises.
+      </p>
+      <p class="mb-3 text-slate-700 dark:text-slate-300">
+        This calculator walks the same seven steps the IRS does: net profit,
+        the 92.35% net-earnings rule, the 15.3% self-employment tax (Social
+        Security capped at the {TAX_YEAR} wage base; Medicare uncapped),
+        the half-SE-tax above-the-line deduction, the standard deduction for
+        your filing status, federal income tax across the seven {TAX_YEAR}
+        marginal brackets from IRS Revenue Procedure 2025-32 (post-OBBBA), and
+        the 0.9% Additional Medicare Tax if your earned income crosses your
+        filing-status threshold. Every number it shows you traces back to a
+        primary IRS source — the publications and the Revenue Procedure are
+        linked at the bottom of every guide on this site.
+      </p>
+      <p class="mb-3 text-slate-700 dark:text-slate-300">
+        The site has one editor — <a href="/about" class="underline">{AUTHOR_NAME}</a> —
+        and one source-of-truth file for every dollar amount and rate it
+        publishes. When the IRS releases the next Revenue Procedure in late
+        autumn, those constants get re-verified and every page on the site
+        updates on the next rebuild. The current values were verified on{" "}
+        <strong>{LAST_VERIFIED}</strong>. The editorial process is{" "}
+        <a href="/about#editorial-process" class="underline">documented on the
+        About page</a>.
+      </p>
+      <p class="text-sm text-slate-600 dark:text-slate-400">
+        <strong>What this is:</strong> a planning tool for set-aside %,
+        quarterly payment amount, and "how much will I owe" sanity checks.{" "}
+        <strong>What this isn't:</strong> a return filer, a substitute for a
+        CPA or Enrolled Agent, or a complete model (it skips QBI, itemized
+        deductions, credits, and most state-specific rules — see the{" "}
+        <a href="/disclaimer" class="underline">full disclaimer</a>).
+      </p>
+    </div>
+  </section>
+
   <section class="mx-auto max-w-3xl px-4 py-12">
     <h2 class="mb-3 text-2xl font-bold">How the math works</h2>
     <p class="mb-4 text-slate-700 dark:text-slate-300">
-      Most freelancer tax tools give a single flat-rate guess and call it a
-      day. This one walks the full federal calculation the way the IRS does:
+      The full federal calculation, the way the IRS does it:
     </p>
     <ol
       class="ml-5 list-decimal space-y-2 text-slate-700 dark:text-slate-300"
@@ -93,7 +145,11 @@ const appLd = {
   {
     guides.length > 0 && (
       <section class="mx-auto max-w-3xl px-4 py-6">
-        <h2 class="mb-4 text-2xl font-bold">Guides</h2>
+        <h2 class="mb-1 text-2xl font-bold">Guides</h2>
+        <p class="mb-4 text-sm text-slate-600 dark:text-slate-400">
+          Plain-English explainers, written and verified by {AUTHOR_NAME} —{" "}
+          editorial review {EDITORIAL_LAST_REVIEWED}.
+        </p>
         <ul class="space-y-3">
           {guides.map((g) => (
             <li class="card p-4">
