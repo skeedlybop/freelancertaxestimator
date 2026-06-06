@@ -73,6 +73,33 @@ Log it **contemporaneously** — at the time of the trip, not reconstructed from
 
 Because mileage reduces net profit, it saves you more than income tax alone. On that ${mileageDeduction(5000).toLocaleString()} example deduction, a freelancer also avoids self-employment tax on the same amount — so the real saving is your income-tax bracket *plus* roughly 14% in SE tax. ([How SE tax works.](/self-employment-tax-explained)) See the [full deductions list](/freelancer-tax-deductions-list) for the other write-offs that stack with this one.
 
+## A side-by-side worked example
+
+Numbers make the standard-vs-actual decision concrete. Picture a freelance photographer with 8,000 business miles on a 5-year-old paid-off sedan, plus 7,000 personal miles for a total of 15,000 — so business-use percentage is **8,000 ÷ 15,000 ≈ 53%**.
+
+**Standard mileage method:**
+
+> 8,000 business miles × {(MILEAGE_RATE_BUSINESS * 100).toFixed(1)}¢ = **${mileageDeduction(8000).toLocaleString()}** deduction. No receipts needed beyond a mileage log.
+
+**Actual expense method:** annual vehicle costs for that car add up like this:
+
+- Gas: $2,400
+- Insurance: $1,500
+- Maintenance and repairs: $900
+- Registration and tags: $200
+- Depreciation (MACRS, year five): $1,200
+- **Total annual vehicle cost: $6,200**
+
+Apply the 53% business-use percentage: **$6,200 × 53% ≈ $3,286** deduction.
+
+Standard mileage wins handily here — **${(mileageDeduction(8000) - 3286).toLocaleString()} more** in deductions, and a fraction of the paperwork. That gap flips for high-cost vehicles (a leased SUV at $7,800/year of total costs would beat standard mileage at 53% use), heavy repair years, or low-MPG trucks. The math is what decides — never assume.
+
+## The first-year choice
+
+There is one technical rule that catches freelancers off guard: **you can switch from standard mileage to actual expenses on the same vehicle later, but you cannot switch the other way** if you took depreciation under the actual method. If you might want flexibility, **start with standard mileage in the vehicle's first business year** and you keep both doors open for the rest of the vehicle's life.
+
+If you switch to actual expenses in a later year on a vehicle that started with standard, depreciation has to be computed using the straight-line method going forward, not MACRS — a minor but real downside. For most freelancers with one car driven a few thousand business miles a year, the straightforward play is: start with standard, track miles, stay with standard.
+
 <CalculatorCTA>
   Add your mileage deduction to your business expenses and the calculator shows
   the tax it saves you, plus your set-aside percentage.
